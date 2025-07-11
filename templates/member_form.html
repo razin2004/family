@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{% if mode=="edit" %}Edit{% else %}Add{% endif %} Family Member</title>
+  <style>
+  :root {
+    --primary: #0077b6;
+    --primary-dark: #005f91;
+    --background: #f4f6f9;
+    --white: #fff;
+    --text: #333;
+    --light-border: #e0e0e0;
+  }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--background);
+    margin: 0;
+    padding: 20px;
+    color: var(--text);
+  }
+
+  h2 {
+    text-align: center;
+    color: var(--primary);
+    margin-bottom: 30px;
+    font-weight: 600;
+  }
+
+  form {
+    background: var(--white);
+    padding: 30px;
+    max-width: 600px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  label {
+    font-weight: 600;
+    margin-top: 20px;
+    display: block;
+    color: var(--primary-dark);
+  }
+
+  input[type="text"],
+  input[type="date"],
+  input[type="file"],
+  select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    margin-bottom: 20px;
+    border: 1px solid var(--light-border);
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+  }
+
+  input:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+
+  button {
+    background: var(--primary);
+    color: var(--white);
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background: var(--primary-dark);
+  }
+
+  .form-checkbox {
+    margin: 20px 0;
+  }
+
+  .form-checkbox label {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    gap: 10px;
+    color: var(--primary-dark);
+  }
+
+  .form-checkbox input[type="checkbox"] {
+    margin: 0;
+    width: 18px;
+    height: 18px;
+  }
+
+  a {
+    color: var(--primary-dark);
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 600px) {
+    form {
+      padding: 20px;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    input, select, button {
+      font-size: 1rem;
+    }
+  }
+</style>
+
+</head>
+<body>
+  <h2>{% if mode=="edit" %}Edit{% else %}Add{% endif %} Family Member</h2>
+  
+  <form method="POST" enctype="multipart/form-data">
+    
+    <label for="name">Full Name *</label>
+    <input 
+      type="text" 
+      name="name" 
+      id="name" 
+      required 
+      value="{{ member.name if mode=='edit' else '' }}"
+      {% if mode == 'edit' %}readonly{% endif %}
+    >
+
+    <label for="gender">Gender *</label>
+    {% if mode == "edit" %}
+      <input 
+        type="text" 
+        name="gender" 
+        id="gender" 
+        value="{{ member.gender }}" 
+        readonly
+      >
+    {% elif default_gender %}
+      <input 
+        type="text" 
+        name="gender" 
+        id="gender" 
+        value="{{ default_gender }}" 
+        readonly
+      >
+    {% else %}
+      <select name="gender" id="gender" required>
+        <option value="">Select Gender</option>
+        <option value="Male" {% if member and member.gender=='Male' %}selected{% endif %}>Male</option>
+        <option value="Female" {% if member and member.gender=='Female' %}selected{% endif %}>Female</option>
+        <option value="Other" {% if member and member.gender=='Other' %}selected{% endif %}>Other</option>
+      </select>
+    {% endif %}
+
+    <label for="dob">Date of Birth *</label>
+    <input 
+      type="date" 
+      name="dob" 
+      id="dob" 
+      required 
+      value="{{ member.dob if mode=='edit' else '' }}"
+      {% if mode == 'edit' %}readonly{% endif %}
+    >
+
+    <label for="blood_group">Blood Group</label>
+    <select name="blood_group" id="blood_group">
+      <option value="">Select Blood Group</option>
+      {% for bg in blood_groups %}
+        <option value="{{ bg }}"
+          {% if member and member.blood_group == bg %}selected{% endif %}
+        >{{ bg }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="job_or_education">Job / Education</label>
+    <input 
+      type="text" 
+      name="job_or_education" 
+      id="job_or_education" 
+      value="{{ member.job_or_education if mode=='edit' else '' }}"
+    >
+
+    <label for="photo">Upload Photo</label>
+    <input type="file" name="photo" id="photo">
+
+    <div class="form-checkbox">
+      <label for="is_late">
+        Mark as Late (Deceased)
+        <input
+          type="checkbox"
+          name="is_late"
+          id="is_late"
+          {% if mode == 'edit' and member.is_late %}checked{% endif %}
+        >
+      </label>
+    </div>
+
+    <button type="submit">
+      {% if mode=="edit" %}Update{% else %}Add{% endif %} Member
+    </button>
+  </form>
+
+  <p><a href="{{ url_for('tree') }}">Back to Tree</a></p>
+</body>
+</html>

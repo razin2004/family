@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Family Tree - Family Portal</title>
+  <style>
+    /* Import theme variables from your dashboard style */
+    :root {
+      --primary: #0077b6;
+      --primary-dark: #005f91;
+      --secondary: #6c757d;
+      --warning: #f39c12;
+      --success: #28a745;
+      --info: #007bff;
+      --danger: #dc3545;
+      --background: #f4f6f9;
+      --white: #fff;
+      --text: #333;
+      --light-border: #e0e0e0;
+      --light-grey: #f9f9f9;
+      --shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      font-family: 'Segoe UI', sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+   header.site-header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  background: var(--primary);
+  color: var(--white);
+  padding: 15px 20px;
+  width: 100%;
+}
+
+.menu-btn {
+  grid-column: 1;
+  justify-self: start;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.menu-btn:hover {
+  color: var(--primary-dark);
+}
+
+.site-title {
+  grid-column: 2;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+    
+    .tree-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      background: var(--white);
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .tree-title {
+      text-align: center;
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+
+    .tree-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .tree-header a {
+      color: var(--white);
+      background: var(--primary);
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .tree-header a:hover {
+      background: var(--primary-dark);
+    }
+
+    .member-box {
+      border: 1px solid var(--light-border);
+      border-radius: 10px;
+      background: var(--white);
+      padding: 15px;
+      margin: 15px;
+      width: 250px;
+      text-align: center;
+      display: inline-block;
+      vertical-align: top;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s;
+    }
+
+    .member-box:hover {
+      transform: translateY(-5px);
+    }
+
+    .member-box img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      border: 2px solid var(--primary);
+    }
+
+    .member-box h3 {
+      margin: 10px 0 5px 0;
+      font-size: 1.2rem;
+      color: var(--primary-dark);
+    }
+
+    .member-box p {
+      margin: 4px 0;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .toggle-family {
+      cursor: pointer;
+      color: var(--primary-dark);
+      text-decoration: underline;
+      margin-top: 8px;
+      display: inline-block;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .children {
+      margin-left: 40px;
+      border-left: 2px dashed var(--light-border);
+      padding-left: 20px;
+      margin-top: 15px;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      margin: 5px;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .btn-add {
+      background: var(--success);
+      color: var(--white);
+    }
+
+    .btn-add:hover {
+      background: #218838;
+    }
+
+    .btn-edit {
+      background: var(--info);
+      color: var(--white);
+    }
+
+    .btn-edit:hover {
+      background: #0069d9;
+    }
+
+    .btn-delete {
+      background: var(--danger);
+      color: var(--white);
+    }
+
+    .btn-delete:hover {
+      background: #c82333;
+    }
+    #sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background: var(--primary);
+  color: #fff;
+  padding-top: 60px;
+  transition: left 0.3s ease;
+  z-index: 9999;
+}
+
+#sidebar a {
+  display: block;
+  color: #fff;
+  padding: 15px 20px;
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#sidebar a:hover {
+  background: var(--primary-dark);
+}
+
+#sidebar #closeBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+
+    @media (max-width: 768px) {
+      .tree-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+
+      .member-box {
+        width: 90%;
+        margin: 10px auto;
+      }
+
+      .children {
+        margin-left: 20px;
+        padding-left: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <button id="menuBtn" class="menu-btn">☰ Menu</button>
+  <span class="site-title">Family Portal</span>
+</header>
+
+
+
+
+<div class="tree-container">
+  <h2 class="tree-title">Family Tree</h2>
+
+  <div class="tree-header">
+    <div></div>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+  </div>
+
+  {% macro render_member(member_id, tree, collapsed=True) %}
+    {% set member = tree[member_id]["member"] %}
+    <div class="member-box" data-member="{{ member.id }}">
+      {% if member.selfie_path %}
+        <img src="/{{ member.selfie_path }}" alt="Selfie">
+      {% else %}
+        <img src="https://via.placeholder.com/100" alt="No Photo">
+      {% endif %}
+
+      <h3>{{ member.name }}</h3>
+
+      <p><strong>DOB:</strong> {{ member.dob }}</p>
+      <p><strong>Gender:</strong> {{ member.gender }}</p>
+      <p><strong>Blood Group:</strong> {{ member.blood_group }}</p>
+      <p><strong>Job/Education:</strong> {{ member.job_or_education }}</p>
+
+      {% if current_user.role in ["Admin", "Contributor"] %}
+        <button type="button" class="btn btn-add toggle-actions-btn">Add / Update</button>
+        <div class="member-actions hidden">
+          {% if not member.is_spouse %}
+            <a href="{{ url_for('add_member', related_to=member.id, relation='child') }}" class="btn btn-add">Add Child</a>
+            {% if member.gender == 'Male' %}
+              <a href="{{ url_for('add_member', related_to=member.id, relation='spouse') }}" class="btn btn-add">Add Wife</a>
+            {% elif member.gender == 'Female' %}
+              <a href="{{ url_for('add_member', related_to=member.id, relation='spouse') }}" class="btn btn-add">Add Husband</a>
+            {% endif %}
+          {% endif %}
+          <a href="{{ url_for('edit_member', member_id=member.id) }}" class="btn btn-edit">Edit</a>
+          {% if current_user.role == 'Admin' %}
+            <form method="POST" action="{{ url_for('delete_member', member_id=member.id) }}" style="display:inline;">
+              <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this member?');">Delete</button>
+            </form>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if tree[member_id]["spouse"] or tree[member_id]["children"] %}
+        <div class="toggle-family">Show Family ▼</div>
+      {% endif %}
+
+      <div class="family-section {% if collapsed %}hidden{% endif %}">
+        {% if tree[member_id]["spouse"] %}
+          <div class="children">
+            <h4>Spouse(s):</h4>
+            {% for spouse_id in tree[member_id]["spouse"] %}
+              {{ render_member(spouse_id, tree, collapsed=True) }}
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% if tree[member_id]["children"] %}
+          <div class="children">
+            <h4>Children:</h4>
+            {% for child_id in tree[member_id]["children"] %}
+              {{ render_member(child_id, tree, collapsed=True) }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endmacro %}
+
+  {% if root_id %}
+    {{ render_member(root_id, tree, collapsed=True) }}
+  {% else %}
+    <p>No root member found.</p>
+  {% endif %}
+</div>
+
+<div id="sidebar">
+  <span id="closeBtn">&times;</span>
+  <a href="{{ url_for('tree') }}">View Family Tree</a>
+  {% if user.role == "Admin" %}
+    <a href="{{ url_for('admin') }}">Manage Users</a>
+  {% endif %}
+  <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".toggle-family").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        const section = this.nextElementSibling;
+        if (section.classList.contains("hidden")) {
+          section.classList.remove("hidden");
+          this.textContent = "Hide Family ▲";
+        } else {
+          section.classList.add("hidden");
+          this.textContent = "Show Family ▼";
+        }
+      });
+    });
+
+    document.querySelectorAll(".toggle-actions-btn").forEach(function(btn) {
+      btn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        const memberBox = btn.closest(".member-box");
+        const actionsDiv = memberBox.querySelector(".member-actions");
+        if (actionsDiv) {
+          actionsDiv.classList.toggle("hidden");
+        }
+      });
+    });
+
+    document.getElementById("menuBtn")?.addEventListener("click", () => {
+      document.getElementById("sidebar").style.left = "0";
+    });
+
+    document.getElementById("closeBtn")?.addEventListener("click", () => {
+      document.getElementById("sidebar").style.left = "-250px";
+    });
+  });
+  document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("menuBtn")?.addEventListener("click", () => {
+    document.getElementById("sidebar").style.left = "0";
+  });
+
+  document.getElementById("closeBtn")?.addEventListener("click", () => {
+    document.getElementById("sidebar").style.left = "-250px";
+  });
+});
+</script>
+<div id="sidebar">
+  <span id="closeBtn">&times;</span>
+  <a href="{{ url_for('tree') }}">View Family Tree</a>
+  {% if user.role == "Admin" %}
+    <a href="{{ url_for('admin') }}">Manage Users</a>
+  {% endif %}
+  <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Family Portal</title>
+  <style>
+/* Root theme colors */
+:root {
+  --primary: #0077b6;
+  --primary-dark: #005f91;
+  --secondary: #6c757d;
+  --secondary-dark: #545b62;
+  --warning: #f39c12;
+  --warning-dark: #d78b0d;
+  --background: #f4f6f9;
+  --white: #ffffff;
+  --text: #333333;
+  --light-border: #e0e0e0;
+  --light-grey: #f9f9f9;
+}
+
+/* Global resets */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* Headings */
+header, h1, h2, h3, h4 {
+  color: var(--primary);
+  margin: 0 0 20px;
+}
+
+/* Site Header */
+.site-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  background: var(--primary);
+  color: var(--white);
+  padding: 15px 20px;
+}
+
+.site-title {
+  grid-column: 2;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-left: -59px; /* try -25px for more shift */
+}
+
+.menu-btn {
+  grid-column: 1;
+  justify-self: start;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.menu-btn:hover {
+  color: var(--primary-dark);
+}
+
+.header-spacer {
+  grid-column: 3;
+  width: 25px; /* adjust this also if needed */
+}
+
+
+
+/* Container */
+.container {
+  max-width: 960px;
+  margin: 40px auto;
+  background: var(--white);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px 5px 0 0;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-warning {
+  background: var(--warning);
+  color: var(--white);
+}
+
+.btn-warning:hover {
+  background: var(--warning-dark);
+}
+
+.btn-secondary {
+  background: var(--secondary);
+  color: var(--white);
+}
+
+.btn-secondary:hover {
+  background: var(--secondary-dark);
+}
+
+/* Messages */
+.message {
+  background: #e2f0fb;
+  border: 1px solid #b3d7f0;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  color: var(--primary);
+}
+
+/* User Info */
+.user-info {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border-left: 5px solid var(--primary);
+}
+
+.user-info p {
+  margin: 0;
+}
+
+/* Form Elements */
+input, select, button {
+  font-size: 1rem;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid var(--light-border);
+  border-radius: 4px;
+  width: 100%;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th,
+table td {
+  border: 1px solid var(--light-border);
+  padding: 12px 15px;
+  text-align: left;
+}
+
+table th {
+  background: var(--primary);
+  color: var(--white);
+}
+
+table tr:nth-child(even) {
+  background: var(--light-grey);
+}
+
+table tr:hover {
+  background: #f1f1f1;
+}
+
+/* Overlay for images */
+#imageOverlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+#imageOverlay img {
+  max-width: 90%;
+  max-height: 80%;
+  border: 4px solid #fff;
+  border-radius: 8px;
+}
+
+#imageOverlay .close-btn {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: #fff;
+  font-size: 30px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Sidebar */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background: var(--primary);
+  color: #fff;
+  padding-top: 60px;
+  transition: left 0.3s ease;
+  z-index: 9999;
+}
+
+#sidebar a {
+  display: block;
+  color: #fff;
+  padding: 15px 20px;
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#sidebar a:hover {
+  background: var(--primary-dark);
+}
+
+#sidebar #closeBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* Admin actions */
+.admin-actions {
+  background: #fff3cd;
+  border-left: 5px solid var(--warning);
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.admin-actions h3 {
+  margin-top: 0;
+  color: var(--warning-dark);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .site-title {
+    font-size: 1.5rem;
+  }
+
+  #sidebar {
+    width: 200px;
+  }
+
+  #sidebar a {
+    padding: 12px 15px;
+  }
+
+  table th, table td {
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  table, table thead, table tbody, table th, table td, table tr {
+    display: block;
+  }
+
+  table tr {
+    margin-bottom: 15px;
+  }
+
+  table td {
+    padding: 10px;
+    text-align: right;
+    position: relative;
+  }
+
+  table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: 50%;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
+}
+</style>
+
+
+</head>
+<body>
+
+  <header class="site-header">
+  {% if mode != "login" %}
+    <button id="menuBtn" class="menu-btn">☰ Menu</button>
+  {% endif %}
+  <span class="site-title">Family Portal</span>
+  <div class="header-spacer"></div>
+</header>
+
+
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul>
+      {% for msg in messages %}
+        <li>{{ msg }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  {% if mode == "login" %}
+  <div class="container">
+    <h2>Login</h2>
+    <form method="POST">
+      <input type="email" name="email" placeholder="Email" value="{{ email or '' }}" required><br>
+      {% if otp_sent %}
+        <input type="text" name="otp" placeholder="Enter OTP" required><br>
+        <button type="submit" name="action" value="login" class="btn btn-primary">Login</button>
+      {% else %}
+        <button type="submit" name="action" value="send_otp" class="btn btn-primary">Send OTP</button>
+      {% endif %}
+    </form>
+  </div>
+  {% endif %}
+
+  {% if mode == "first_profile" %}
+    <h2>First Login - Complete Your Profile</h2>
+    <form method="POST" onsubmit="return captureSelfie()">
+      <input type="text" name="name" placeholder="Full Name" required><br>
+      <video id="video" width="320" height="240" autoplay></video><br>
+      <button type="button" onclick="takePhoto()">Capture Selfie</button><br>
+      <canvas id="canvas" width="320" height="240" class="hidden"></canvas>
+      <input type="hidden" name="selfie" id="selfieInput">
+      <button type="submit">Submit</button>
+    </form>
+
+    <script>
+      const video = document.getElementById('video');
+      navigator.mediaDevices.getUserMedia({video: true}).then(stream => {
+        video.srcObject = stream;
+      });
+
+      function takePhoto() {
+        const canvas = document.getElementById('canvas');
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        document.getElementById('selfieInput').value = canvas.toDataURL('image/png');
+        alert("Selfie captured!");
+      }
+
+      function captureSelfie() {
+        if (!document.getElementById('selfieInput').value) {
+          alert("Please capture a selfie!");
+          return false;
+        }
+        return true;
+      }
+    </script>
+  {% endif %}
+
+  {% if mode == "pending" %}
+    <h2>Your account is awaiting admin approval.</h2>
+    <p>We’ll notify you once it’s approved.</p>
+  {% endif %}
+
+ {% if mode == "dashboard" and user %}
+
+
+<div class="container">
+  <h2>Welcome, {{ user.name }}!</h2>
+  <div class="user-info">
+    <p><strong>Role:</strong> {{ user.role }}</p>
+  </div>
+
+  {% if user.role == "Admin" and (pending_count or 0) > 0 %}
+    <div class="admin-actions">
+      <h3>Admin Actions</h3>
+      <p>You have <strong>{{ pending_count }}</strong> pending requests.</p>
+      <a href="{{ url_for('admin', filter='pending') }}" class="btn btn-warning">
+        Manage/Approve Users
+      </a>
+    </div>
+  {% endif %}
+
+  <div style="margin-top:20px;">
+    {% if user.role in ["Admin", "Contributor", "Viewer"] %}
+      <a href="{{ url_for('tree') }}" class="btn btn-primary">View Family Tree</a>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+
+  {% if mode == 'admin' %}
+    <h2>User Management</h2>
+
+    <form method="get">
+      <label>Filter:</label>
+      <select name="filter" onchange="this.form.submit()">
+        <option value="all" {% if current_filter == 'all' %}selected{% endif %}>All Users</option>
+        <option value="pending" {% if current_filter == 'pending' %}selected{% endif %}>Pending Approvals</option>
+        <option value="approved" {% if current_filter == 'approved' %}selected{% endif %}>Approved Users</option>
+      </select>
+    </form>
+
+    <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%; margin-top: 15px;">
+      <tr>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Role</th>
+        <th>Verified</th>
+        <th>Approved</th>
+        <th>Change Role</th>
+        <th>Action</th>
+      </tr>
+      {% for user in users %}
+      <tr>
+        <td>{{ user.email }}</td>
+        <td>{{ user.name }}</td>
+        <td>
+          {% if user.selfie_path %}
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="showOverlay('{{ url_for('selfies', filename=user.selfie_path.split('/')[-1]) }}', '{{ user.email }}')"
+            >
+              Show Image
+            </button>
+          {% else %}
+            <p>No photo uploaded.</p>
+          {% endif %}
+        </td>
+        <td>{{ user.role }}</td>
+        <td>{{ 'Yes' if user.is_verified else 'No' }}</td>
+        <td>{{ 'Yes' if user.is_approved else 'No' }}</td>
+        <td>
+          <form method="post" style="display:inline;">
+            <input type="hidden" name="user_id" value="{{ user.id }}">
+            <select name="role">
+              <option value="Viewer" {% if user.role == 'Viewer' %}selected{% endif %}>Viewer</option>
+              <option value="Contributor" {% if user.role == 'Contributor' %}selected{% endif %}>Contributor</option>
+              <option value="Admin" {% if user.role == 'Admin' %}selected{% endif %}>Admin</option>
+            </select>
+            <button type="submit" name="action" value="update_role">Update</button>
+          </form>
+        </td>
+        <td>
+          {% if user.email != SUPER_ADMIN_EMAIL and user.email != "razinmuhammed1999@gmail.com" %}
+            {% if current_filter == 'pending' %}
+              <form method="post" style="display:inline;">
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                <button type="submit" name="action" value="approve">Approve</button>
+              </form>
+            {% endif %}
+            <form method="post" style="display:inline;">
+              <input type="hidden" name="user_id" value="{{ user.id }}">
+              <button type="submit" name="action" value="delete">Delete</button>
+            </form>
+          {% else %}
+            Protected
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% endif %}
+
+  <!-- Hidden overlay -->
+  <div id="imageOverlay">
+    <span class="close-btn" onclick="hideOverlay()">&times;</span>
+    <img id="overlayImage" src="" alt="User Image">
+  </div>
+
+  <div id="current-user"
+       data-email="{{ user.email if user else '' }}"
+       data-role="{{ user.role if user else 'Admin' }}"
+       style="display:none;"></div>
+
+  <script>
+    const currentUserElem = document.getElementById('current-user');
+    const currentUserEmail = currentUserElem ? currentUserElem.getAttribute('data-email') : null;
+    const currentUserRole = currentUserElem ? currentUserElem.getAttribute('data-role') : null;
+
+   function showOverlay(imageUrl, imageOwnerEmail) {
+    // Block ALL others from viewing this specific protected user
+    if (imageOwnerEmail === "razinmuhammed1999@gmail.com" && currentUserEmail !== "razinmuhammed1999@gmail.com") {
+        alert("You are not allowed to view this protected image.");
+        return;
+    }
+
+    // Normal rules for other users
+    if (currentUserRole !== "Admin" && currentUserEmail !== imageOwnerEmail) {
+        alert("You are not allowed to view this image.");
+        return;
+    }
+
+    document.getElementById('overlayImage').src = imageUrl;
+    document.getElementById('imageOverlay').style.display = 'flex';
+}
+
+
+    function hideOverlay() {
+      document.getElementById('imageOverlay').style.display = 'none';
+    }
+    document.getElementById("menuBtn")?.addEventListener("click", () => {
+  document.getElementById("sidebar").style.left = "0";
+});
+
+document.getElementById("closeBtn")?.addEventListener("click", () => {
+  document.getElementById("sidebar").style.left = "-250px";
+});
+  </script>
+<div id="sidebar">
+  <span id="closeBtn">&times;</span>
+  <a href="{{ url_for('tree') }}">View Family Tree</a>
+  {% if user.role == "Admin" %}
+    <a href="{{ url_for('admin') }}">Manage Users</a>
+  {% endif %}
+  <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("menuBtn")?.addEventListener("click", () => {
+    document.getElementById("sidebar").style.left = "0";
+  });
+
+  document.getElementById("closeBtn")?.addEventListener("click", () => {
+    document.getElementById("sidebar").style.left = "-250px";
+  });
+});
+</script>
+
+
+</body>
+</html>
