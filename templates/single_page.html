@@ -2,8 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
   <title>Family Portal</title>
   <style>
+  html, body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
 /* Root theme colors */
 :root {
   --primary: #0077b6;
@@ -40,42 +51,45 @@ header, h1, h2, h3, h4 {
 
 /* Site Header */
 .site-header {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   background: var(--primary);
   color: var(--white);
-  padding: 15px 20px;
-}
-
-.site-title {
-  grid-column: 2;
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: center;
-  margin-left: -59px; /* try -25px for more shift */
+  padding: 12px 16px;
+  width: 100%;
 }
 
 .menu-btn {
-  grid-column: 1;
-  justify-self: start;
-  font-size: 1.5rem;
   background: none;
   border: none;
   color: var(--white);
   cursor: pointer;
+  font-size: 1.4rem;
+  width: 48px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
 }
 
 .menu-btn:hover {
   color: var(--primary-dark);
 }
 
-.header-spacer {
-  grid-column: 3;
-  width: 25px; /* adjust this also if needed */
+.site-title {
+  flex: none;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
 }
 
-
+.menu-placeholder {
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+}
 
 /* Container */
 .container {
@@ -83,8 +97,9 @@ header, h1, h2, h3, h4 {
   margin: 40px auto;
   background: var(--white);
   padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e0e0e0;
 }
 
 /* Buttons */
@@ -268,72 +283,118 @@ table tr:hover {
 }
 
 /* Responsive styles */
-@media (max-width: 768px) {
-  .container {
-    padding: 20px;
-    margin: 20px;
+@media (max-width: 600px) {
+  html {
+    font-size: 16px;
+  }
+
+  .site-header {
+    padding: 12px;
   }
 
   .site-title {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+  }
+
+  .menu-btn {
+    font-size: 1.2rem;
+    width: 36px;
+    height: 24px;
+  }
+
+  .menu-placeholder {
+    width: 36px;
+  }
+
+  .btn {
+    width: 100%;
+    margin: 12px 0;
+    font-size: 1.2rem;
+    padding: 14px 20px;
+  }
+
+  input, select, button {
+    font-size: 1.1rem;
+    padding: 14px 16px;
+  }
+
+  .container {
+    width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: none;
+    border-radius: 0;
   }
 
   #sidebar {
-    width: 200px;
+    width: 220px;
+    padding-top: 50px;
   }
 
   #sidebar a {
-    padding: 12px 15px;
+    font-size: 1.2rem;
+    padding: 14px 18px;
   }
 
-  table th, table td {
-    padding: 8px 10px;
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 6px;
+    border: 1px solid var(--light-border);
   }
+
+  table {
+    min-width: 750px;
+    border-collapse: collapse;
+  }
+
+table th,
+table td {
+  padding: 4px 8px;     /* less vertical padding */
+  font-size: 0.85rem;
+  line-height: 1.2;
 }
 
-@media (max-width: 480px) {
-  .btn {
-    width: 100%;
-    margin: 5px 0;
-  }
 
-  table, table thead, table tbody, table th, table td, table tr {
-    display: block;
-  }
-
-  table tr {
-    margin-bottom: 15px;
-  }
-
-  table td {
-    padding: 10px;
-    text-align: right;
-    position: relative;
-  }
-
-  table td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 10px;
-    width: 50%;
-    white-space: nowrap;
-    text-align: left;
+  table th {
+    background: var(--primary);
+    color: var(--white);
     font-weight: bold;
   }
+
+  table tr:nth-child(even) {
+    background: var(--light-grey);
+  }
+
+  table tr:hover {
+    background: #f1f1f1;
+  }
 }
+
+
+
 </style>
 
 
 </head>
 <body>
 
-  <header class="site-header">
+ <header class="site-header">
   {% if mode != "login" %}
-    <button id="menuBtn" class="menu-btn">☰ Menu</button>
+    <button id="menuBtn" class="menu-btn">☰</button>
+  {% else %}
+    <span class="menu-placeholder"></span>
   {% endif %}
   <span class="site-title">Family Portal</span>
-  <div class="header-spacer"></div>
+  {% if mode != "login" %}
+    <span class="menu-placeholder"></span>
+  {% else %}
+    <span class="menu-placeholder"></span>
+  {% endif %}
 </header>
+
+
 
 
 
@@ -440,7 +501,7 @@ table tr:hover {
         <option value="approved" {% if current_filter == 'approved' %}selected{% endif %}>Approved Users</option>
       </select>
     </form>
-
+<div class="table-responsive">
     <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%; margin-top: 15px;">
       <tr>
         <th>Email</th>
@@ -502,6 +563,7 @@ table tr:hover {
       </tr>
       {% endfor %}
     </table>
+    </div>
   {% endif %}
 
   <!-- Hidden overlay -->

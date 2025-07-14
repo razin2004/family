@@ -2,51 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Family Tree - Family Portal</title>
   <style>
-    /* Import theme variables from your dashboard style */
-    :root {
-      --primary: #0077b6;
-      --primary-dark: #005f91;
-      --secondary: #6c757d;
-      --warning: #f39c12;
-      --success: #28a745;
-      --info: #007bff;
-      --danger: #dc3545;
-      --background: #f4f6f9;
-      --white: #fff;
-      --text: #333;
-      --light-border: #e0e0e0;
-      --light-grey: #f9f9f9;
-      --shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
-    }
+ :root {
+  --primary: #0077b6;
+  --primary-dark: #005f91;
+  --secondary: #6c757d;
+  --secondary-dark: #545b62;
+  --warning: #f39c12;
+  --warning-dark: #d78b0d;
+  --success: #28a745;
+  --info: #007bff;
+  --danger: #dc3545;
+  --background: #f4f6f9;
+  --white: #ffffff;
+  --text: #333333;
+  --light-border: #e0e0e0;
+  --light-grey: #f9f9f9;
+  --shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+}
 
-    body {
-      margin: 0;
-      background: var(--background);
-      font-family: 'Segoe UI', sans-serif;
-      color: var(--text);
-      line-height: 1.5;
-    }
+/* Reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
 
-   header.site-header {
-  display: grid;
-  grid-template-columns: auto 1fr;
+html {
+  font-size: 16px;
+}
+
+body {
+  background: var(--background);
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* Header */
+.site-header {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   background: var(--primary);
   color: var(--white);
-  padding: 15px 20px;
+  padding: 12px 16px;
   width: 100%;
 }
 
 .menu-btn {
-  grid-column: 1;
-  justify-self: start;
-  font-size: 1.5rem;
   background: none;
   border: none;
   color: var(--white);
   cursor: pointer;
+  font-size: 1.4rem;
+  width: 48px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
 }
 
 .menu-btn:hover {
@@ -54,151 +72,266 @@
 }
 
 .site-title {
-  grid-column: 2;
-  font-size: 2rem;
-  font-weight: bold;
+  flex: none;
   text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-left: -17px;
 }
 
+.menu-placeholder {
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+}
+
+@media (max-width: 600px) {
+  .site-header {
+    padding: 12px;
     
-    .tree-container {
-      max-width: 1200px;
-      margin: 40px auto;
-      background: var(--white);
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-    }
+  }
 
-    .tree-title {
-      text-align: center;
-      color: var(--primary);
-      font-size: 2rem;
-      margin-bottom: 30px;
-      font-weight: 600;
-    }
+  .site-title {
+    font-size: 1.6rem;
+    margin-left: -24px;
+  }
 
-    .tree-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-    }
+  .menu-btn {
+    font-size: 1.2rem;
+    width: 36px;
+    height: 24px;
+  }
 
-    .tree-header a {
-      color: var(--white);
-      background: var(--primary);
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
+  .menu-placeholder {
+    width: 36px;
+  }
+}
 
-    .tree-header a:hover {
-      background: var(--primary-dark);
-    }
 
-    .member-box {
-      border: 1px solid var(--light-border);
-      border-radius: 10px;
-      background: var(--white);
-      padding: 15px;
-      margin: 15px;
-      width: 250px;
-      text-align: center;
-      display: inline-block;
-      vertical-align: top;
-      box-shadow: var(--shadow);
-      transition: transform 0.3s;
-    }
 
-    .member-box:hover {
-      transform: translateY(-5px);
-    }
+/* Tree page title */
+.tree-title {
+  text-align: center;
+  color: var(--primary);
+  font-size: 2rem;
+  margin-bottom: 30px;
+  font-weight: 600;
+  margin-left: 9px;
+}
 
-    .member-box img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      border-radius: 50%;
-      margin-bottom: 10px;
-      border: 2px solid var(--primary);
-    }
+/* Tree header buttons */
+.tree-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
 
-    .member-box h3 {
-      margin: 10px 0 5px 0;
-      font-size: 1.2rem;
-      color: var(--primary-dark);
-    }
+.tree-header a {
+  display: inline-block;
+  color: var(--white);
+  background: var(--primary);
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
 
-    .member-box p {
-      margin: 4px 0;
-      font-size: 0.95rem;
-      color: #555;
-    }
+.tree-header a:hover {
+  background: var(--primary-dark);
+}
 
-    .toggle-family {
-      cursor: pointer;
-      color: var(--primary-dark);
-      text-decoration: underline;
-      margin-top: 8px;
-      display: inline-block;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
 
-    .hidden {
-      display: none;
-    }
+/* Container */
+.container {
+  max-width: 960px;
+  margin: 40px auto;
+  background: var(--white);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid #e0e0e0;
+}
 
-    .children {
-      margin-left: 40px;
-      border-left: 2px dashed var(--light-border);
-      padding-left: 20px;
-      margin-top: 15px;
-    }
+/* Tree container - wrap member boxes */
+.tree-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
-    .btn {
-      padding: 8px 14px;
-      margin: 5px;
-      font-size: 0.9rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      display: inline-block;
-      text-decoration: none;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
+/* Member box */
+.member-box {
+  border: 1px solid var(--light-border);
+  border-radius: 10px;
+  background: var(--white);
+  padding: 15px;
+  margin: 15px;
+  width: 250px;
+  max-width: 100%;
+  text-align: center;
+  display: block;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s;
+}
 
-    .btn-add {
-      background: var(--success);
-      color: var(--white);
-    }
+.member-box:hover {
+  transform: translateY(-5px);
+}
 
-    .btn-add:hover {
-      background: #218838;
-    }
+.member-box img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  border: 2px solid var(--primary);
+}
 
-    .btn-edit {
-      background: var(--info);
-      color: var(--white);
-    }
+.member-box h3 {
+  margin: 10px 0 5px 0;
+  font-size: 1.2rem;
+  color: var(--primary-dark);
+}
 
-    .btn-edit:hover {
-      background: #0069d9;
-    }
+.member-box p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+  color: #555;
+}
 
-    .btn-delete {
-      background: var(--danger);
-      color: var(--white);
-    }
+/* Family toggle */
+.toggle-family {
+  cursor: pointer;
+  color: var(--primary-dark);
+  text-decoration: underline;
+  margin-top: 8px;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
 
-    .btn-delete:hover {
-      background: #c82333;
-    }
-    #sidebar {
+.hidden {
+  display: none;
+}
+
+.children {
+  margin-left: 40px;
+  border-left: 2px dashed var(--light-border);
+  padding-left: 20px;
+  margin-top: 15px;
+}
+
+h4 {
+  margin-top: 10px;
+  color: var(--primary);
+  font-size: 1.2rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  margin-left:12px;
+}
+
+.btn-back {
+  background: var(--secondary);
+  color: var(--white);
+}
+
+.btn-back:hover {
+  background: var(--secondary-dark);
+}
+
+.btn-add {
+  background: var(--success);
+  color: var(--white);
+}
+
+.btn-add:hover {
+  background: #218838;
+}
+
+.btn-edit {
+  background: var(--info);
+  color: var(--white);
+}
+
+.btn-edit:hover {
+  background: #0069d9;
+}
+
+.btn-delete {
+  background: var(--danger);
+  color: var(--white);
+}
+
+.btn-delete:hover {
+  background: #c82333;
+}
+@media (max-width: 768px) {
+  .tree-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .tree-header a {
+    width: 100%;
+    margin: 12px 0;
+    font-size: 1.2rem;
+    padding: 14px 20px;
+  }
+}
+@media (max-width: 600px) {
+  
+
+ .btn.btn-back {
+  font-size: 0.60rem !important;
+  padding: 4px 8px !important;
+  width: 100px !important;
+  margin-left:138px;
+  margin-top:-22px;
+}
+
+
+
+
+}
+
+@media (max-width: 768px) {
+  
+
+ .btn {
+  width: auto;            /* instead of 100% */
+  font-size: 0.8rem;      /* smaller text */
+  padding: 6px 10px;      /* smaller padding */
+  margin: 8px;            /* reduce margin if needed */
+}
+
+
+  .member-box {
+  width: 250px;         /* instead of 100% */
+  max-width: 90%;
+  margin: 10px auto;
+  transform: scale(0.9);
+ 
+}
+
+
+/* Sidebar */
+#sidebar {
   position: fixed;
   top: 0;
   left: -250px;
@@ -231,43 +364,60 @@
   font-size: 28px;
   cursor: pointer;
 }
+@media (max-width: 600px) {
+  .container {
+    width: 100%;
+    max-width: 100%;
+    margin: -16px auto;
+    padding: 12px;
+    border-radius: 0;
+    box-shadow: none;
+      transform: scale(0.95);
+   margin-left:-17px;
+  }
+
+  .tree-title {
+    margin-left: 0;
+    font-size: 1.6rem;
+  }
+
+  .member-box {
+    width: 100%;
+    margin: 12px 0;
+  }
+
+  .children {
+    margin-left: 20px;
+    padding-left: 10px;
+  }
+}
 
 
-    @media (max-width: 768px) {
-      .tree-header {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-      }
 
-      .member-box {
-        width: 90%;
-        margin: 10px auto;
-      }
-
-      .children {
-        margin-left: 20px;
-        padding-left: 10px;
-      }
-    }
   </style>
 </head>
 <body>
-<header class="site-header">
-  <button id="menuBtn" class="menu-btn">☰ Menu</button>
-  <span class="site-title">Family Portal</span>
-</header>
+  <header class="site-header">
+    {% if mode != "login" %}
+      <button id="menuBtn" class="menu-btn">☰</button>
+    {% else %}
+      <span class="menu-placeholder"></span>
+    {% endif %}
+    <span class="site-title">Family Portal</span>
+    {% if mode != "login" %}
+      <span class="menu-placeholder"></span>
+    {% else %}
+      <span class="menu-placeholder"></span>
+    {% endif %}
+  </header>
 
+  <div class="container">
+    <h2 class="tree-title">Family Tree</h2>
 
+    <div class="tree-header">
+      <a href="{{ url_for('dashboard') }}" class="btn btn-back">← Back to Dashboard</a>
+    </div>
 
-
-<div class="tree-container">
-  <h2 class="tree-title">Family Tree</h2>
-
-  <div class="tree-header">
-    <div></div>
-    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
-  </div>
 
   {% macro render_member(member_id, tree, collapsed=True) %}
     {% set member = tree[member_id]["member"] %}
@@ -337,6 +487,8 @@
   {% endif %}
 </div>
 
+
+
 <div id="sidebar">
   <span id="closeBtn">&times;</span>
   <a href="{{ url_for('tree') }}">View Family Tree</a>
@@ -345,7 +497,6 @@
   {% endif %}
   <a href="{{ url_for('logout') }}">Logout</a>
 </div>
-
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".toggle-family").forEach(function(btn) {
@@ -372,32 +523,25 @@
       });
     });
 
-    document.getElementById("menuBtn")?.addEventListener("click", () => {
-      document.getElementById("sidebar").style.left = "0";
-    });
+    // Sidebar open/close
+    const menuBtn = document.getElementById("menuBtn");
+    const closeBtn = document.getElementById("closeBtn");
+    const sidebar = document.getElementById("sidebar");
 
-    document.getElementById("closeBtn")?.addEventListener("click", () => {
-      document.getElementById("sidebar").style.left = "-250px";
-    });
-  });
-  document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("menuBtn")?.addEventListener("click", () => {
-    document.getElementById("sidebar").style.left = "0";
-  });
+    if (menuBtn && sidebar) {
+      menuBtn.addEventListener("click", () => {
+        sidebar.style.left = "0";
+      });
+    }
 
-  document.getElementById("closeBtn")?.addEventListener("click", () => {
-    document.getElementById("sidebar").style.left = "-250px";
+    if (closeBtn && sidebar) {
+      closeBtn.addEventListener("click", () => {
+        sidebar.style.left = "-250px";
+      });
+    }
   });
-});
 </script>
-<div id="sidebar">
-  <span id="closeBtn">&times;</span>
-  <a href="{{ url_for('tree') }}">View Family Tree</a>
-  {% if user.role == "Admin" %}
-    <a href="{{ url_for('admin') }}">Manage Users</a>
-  {% endif %}
-  <a href="{{ url_for('logout') }}">Logout</a>
-</div>
+
 
 </body>
 </html>
