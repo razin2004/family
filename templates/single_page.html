@@ -267,6 +267,11 @@ table tr:hover {
   font-size: 28px;
   cursor: pointer;
 }
+#sidebar a.active-sidebar {
+  background: #28a745; /* bright green */
+  color: #fff;
+}
+
 
 /* Admin actions */
 .admin-actions {
@@ -613,12 +618,21 @@ document.getElementById("closeBtn")?.addEventListener("click", () => {
   </script>
 <div id="sidebar">
   <span id="closeBtn">&times;</span>
-  <a href="{{ url_for('tree') }}">View Family Tree</a>
+  
+  <a href="{{ url_for('dashboard') }}"
+     class="{% if mode == 'dashboard' %}active-sidebar{% endif %}">Dashboard</a>
+  
+  <a href="{{ url_for('tree') }}"
+     class="{% if mode == 'tree' %}active-sidebar{% endif %}">View Family Tree</a>
+  
   {% if user.role == "Admin" %}
-    <a href="{{ url_for('admin') }}">Manage Users</a>
+    <a href="{{ url_for('admin') }}"
+       class="{% if mode == 'admin' %}active-sidebar{% endif %}">Manage Users</a>
   {% endif %}
+  
   <a href="{{ url_for('logout') }}">Logout</a>
 </div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("menuBtn")?.addEventListener("click", () => {

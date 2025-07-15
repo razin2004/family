@@ -444,6 +444,7 @@ def tree():
         "tree.html",
         tree=tree,
         root_id=root_id,
+        mode="tree", 
         user=current_user
     )
 
