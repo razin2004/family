@@ -10,6 +10,8 @@ import sqlite3
 from datetime import timedelta
 from flask import session
 
+from flask import Flask, render_template, jsonify, request
+import sqlite3
 
 # SUPER ADMIN email
 SUPER_ADMIN_EMAIL = "doctorbooksystem@gmail.com"
@@ -487,11 +489,21 @@ def add_member():
 
     if request.method == "POST":
         name = request.form["name"]
-        dob = request.form["dob"]
+        dob_unknown = request.form.get("dob_unknown")
+        dob = request.form.get("dob") or None
+        is_late = 1 if request.form.get("is_late") == "on" else 0
+
+        if dob_unknown and not is_late:
+            flash("Only late members can have Date of Birth marked as unknown.")
+            return redirect(request.url)
+
+        if dob_unknown:
+            dob = None
+
         gender = request.form["gender"]
         job = request.form.get("job_or_education")
         blood_group = request.form.get("blood_group")
-        is_late = 1 if request.form.get("is_late") == "on" else 0
+        nickname = request.form.get("nickname") or None
 
         # enforce spouse gender if applicable
         if relation == "spouse" and default_gender:
@@ -504,11 +516,10 @@ def add_member():
             photo_file.save(selfie_path)
 
         cur = db.execute("""
-    INSERT INTO family_members
-    (name, is_late, dob, gender, job_or_education, blood_group, selfie_path)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-""", (name,is_late, dob, gender, job, blood_group, selfie_path))
-
+            INSERT INTO family_members
+            (name, is_late, dob, gender, job_or_education, blood_group, selfie_path, nickname)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """, (name, is_late, dob, gender, job, blood_group, selfie_path, nickname))
 
         new_member_id = cur.lastrowid
 
@@ -517,8 +528,8 @@ def add_member():
                 INSERT INTO relationships (member_id, relation, related_to)
                 VALUES (?, ?, ?)
             """, (new_member_id, relation, related_to))
-        db.commit()
 
+        db.commit()
         flash("Member added.")
         return redirect(url_for("tree"))
 
@@ -530,6 +541,7 @@ def add_member():
         default_gender=default_gender,
         blood_groups=blood_groups
     )
+
 @app.route("/tree/edit/<int:member_id>", methods=["GET", "POST"])
 @login_required
 def edit_member(member_id):
@@ -546,48 +558,56 @@ def edit_member(member_id):
         flash("Member not found.")
         return redirect(url_for("tree"))
 
-    # Ensure blood_group is not None
+    # Convert to dict for easier use
     member = dict(member)
+
+    # Ensure blood_group is not None
     if member["blood_group"] is None:
         member["blood_group"] = ""
 
     blood_groups = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"]
 
     if request.method == "POST":
-        # Don't allow editing of these fields
-        name = member["name"]
-        dob = member["dob"]
-        gender = member["gender"]
-
-        blood_group = request.form.get("blood_group") or None
-        job = request.form.get("job_or_education")
+        name = request.form["name"]
+        dob_unknown = request.form.get("dob_unknown")
+        dob = request.form.get("dob") or None
         is_late = 1 if request.form.get("is_late") == "on" else 0
+
+        if dob_unknown and not is_late:
+            flash("Only late members can have Date of Birth marked as unknown.")
+            return redirect(request.url)
+
+        if dob_unknown:
+            dob = None
+
+        gender = request.form["gender"]
+        job = request.form.get("job_or_education")
+        blood_group = request.form.get("blood_group")
+        nickname = request.form.get("nickname") or None
 
         # Handle uploaded image file
         photo_file = request.files.get("photo")
         selfie_path = member["selfie_path"]  # Keep existing if no new upload
 
         if photo_file and photo_file.filename:
-            filename = f"selfies/member_{random.randint(10000, 99999)}.png"
-            photo_file.save(filename)
-            selfie_path = filename
+            selfie_path = f"selfies/member_{random.randint(10000,99999)}.png"
+            photo_file.save(selfie_path)
 
-        # Update member info in database
+        # Update the existing member in DB
         db.execute("""
             UPDATE family_members
-            SET
-                name = ?,
+            SET name = ?,
                 is_late = ?,
                 dob = ?,
                 gender = ?,
-                blood_group = ?,
                 job_or_education = ?,
-                selfie_path = ?
+                blood_group = ?,
+                selfie_path = ?,
+                nickname = ?
             WHERE id = ?
-        """, (name, is_late, dob, gender, blood_group, job, selfie_path, member_id))
+        """, (name, is_late, dob, gender, job, blood_group, selfie_path, nickname, member_id))
 
         db.commit()
-
         flash("Member updated successfully.")
         return redirect(url_for("tree"))
 
@@ -596,7 +616,7 @@ def edit_member(member_id):
         mode="edit",
         member=member,
         blood_groups=blood_groups,
-        default_gender=None  # pass in case your template expects it
+        default_gender=None
     )
 
 @app.route("/tree/delete/<int:member_id>", methods=["POST"])
@@ -695,6 +715,54 @@ def inject_filter_value():
     return {
         "current_filter": request.args.get("filter", "all")
     }
+
+
+
+
+@app.route("/bloodgroup")
+def bloodgroup_page():
+ return render_template(
+        "bloodgroup.html",
+        user=current_user,
+        mode="bloodgroup"
+    )
+@app.route("/api/bloodgroup", methods=["POST"])
+def search_by_blood_group():
+    data = request.get_json()
+    blood_group = data.get("blood_group")
+
+    if not blood_group:
+        return jsonify({"members": []})
+
+    conn = sqlite3.connect("family.db")
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT * FROM family_members
+        WHERE blood_group = ?
+        AND is_late = 0
+        ORDER BY date(dob) ASC
+    """, (blood_group,))
+    rows = cur.fetchall()
+    conn.close()
+
+    members = []
+    for row in rows:
+        members.append({
+            "id": row["id"],
+            "name": row["name"],
+            "nickname": row["nickname"],
+            "blood_group": row["blood_group"],
+            "dob": row["dob"],
+            "gender": row["gender"],
+            "job_or_education": row["job_or_education"],
+            "is_late": row["is_late"]
+        })
+
+    return jsonify({"members": members})
+
+
 
 
 if __name__ == "__main__":

@@ -162,7 +162,7 @@ body {
   border: 1px solid var(--light-border);
   border-radius: 10px;
   background: var(--white);
-  padding: 15px;
+  padding: 15px  ;
   margin: 15px;
   width: 250px;
   text-align: center;
@@ -170,7 +170,12 @@ body {
   box-shadow: var(--shadow);
   transition: transform 0.3s;
 }
-
+.member-box {
+    width: 100%;
+    max-width: 230px;
+    margin: 10px auto;
+    padding: 8px 6px;
+  }
 .member-box:hover {
   transform: translateY(-5px);
 }
@@ -359,17 +364,7 @@ h4 {
     margin: 8px;
   }
 }
-@media (max-width: 600px) {
-  
 
- .btn.btn-back {
-  font-size: 0.55rem !important;
-  padding: 2px 0px !important;
-  width: 100px !important;
-  margin-left:105px;
-  margin-top:-29px;
-}
-}
 @media (max-width: 600px) {
   .container {
     width: 70%;
@@ -382,6 +377,10 @@ h4 {
    margin-left:-200px;
    margin-top:0px;
     margin-bottom:0px;
+    background: var(--background);
+ border: 0px solid var(--light-border);
+  border-radius: 0px;
+  
   }
 }
 @media (max-width: 600px) {
@@ -391,11 +390,8 @@ h4 {
     font-size: 1.6rem;
     
   }
-  
- 
-
-  
 }
+
 @media (max-width: 600px) {
   .member-box {
     width: 100%;
@@ -431,9 +427,6 @@ h4 {
     font-size: 0.6rem;
     margin-top: 6px;
   }
-
- 
-
  
 }
 
@@ -445,13 +438,9 @@ h4 {
     margin-top: -20px;
   }
 }
-
 .highlighted {
   background-color: #fff9c4 !important;
 }
-
-
-
 
 /* Fixed Next Match button */
 .fixed-next-btn {
@@ -461,22 +450,46 @@ h4 {
   z-index: 9999;
 }
 
+/* Align search input and button heights and reduce gap */
+.search-bar input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  height: 30px;
+  padding: 0 12px;
+  font-size: 1rem;
+}
+
+.search-bar .btn {
+  flex: 0 0 auto;
+  height: 30px;
+  padding: 0 4px;
+  font-size: 0.8rem;
+  margin-left: 0;
+}
+
+
 .search-bar {
   display: flex;
+  flex-wrap: nowrap;
   justify-content: center;
-  align-items: stretch;
-  gap: 1px;
-    width: 300px;
-    height: 25px;
-  flex: none;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .search-bar input,
+  .search-bar .btn {
+    height: 22px;
+    font-size: 0.7rem;
+  }
 }
 
 
 
-.search-bar input {
-  flex: 1;
-  width: 100px;
-}
 .fixed-buttons {
   position: fixed;
   bottom: 10px;
@@ -487,12 +500,12 @@ h4 {
   z-index: 9999;
 }
 
-/* DESKTOP styles */
+/* Desktop buttons */
 .btn.btn-add.small-btn {
   background: var(--success);
   color: var(--white);
   font-size: 0.75rem;
-  padding: 1px 1px;
+  padding: 6px 10px;
   min-width: 70px;
 }
 
@@ -512,30 +525,87 @@ h4 {
   background: var(--secondary-dark);
 }
 
+/* Mobile button tweaks */
 @media (max-width: 600px) {
   .fixed-buttons {
-    bottom: 8px;
-    right: 8px;
-    gap: 6px;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
   }
 
-  .btn.btn-add.small-btn {
-    font-size: 0.6rem;
-    padding: 4px 8px;
-    min-width: 50px;
+  .btn.small-btn {
+    font-size: 0.55rem;
+    padding: 4px 6px;
+    min-width: 80px;
+    margin: 0;
   }
 
-  .btn.btn-back.small-btn {
-    font-size: 0.6rem;
-    padding: 4px 8px;
+  #scrollTopBtn.btn.small-btn {
+    font-size: 0.5rem;
+    padding: 3px 5px;
     min-width: 50px;
   }
+  #nextMatchBtn.btn.small-btn {
+  font-size: 0.5rem;
+  padding: 3px 5px;
+  min-width: 50px;
+}
+
+}
+.tree-header a.btn-back {
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  margin-top: -10px;
+}
+
+/* Mobile adjustment */
+@media (max-width: 600px) {
+  .tree-header a.btn-back {
+    font-size: 0.50rem;
+    padding: 2px 6px;
+    margin-top: -25px;
+    max-width: 80px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 110px;
+  }
+  
+}
+.member-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0px;
+}
+.member-actions.hidden {
+  display: none;
+}
+
+
+/* Optional: button spacing improvements */
+.member-actions .btn {
+  font-size: 0.60rem;
+  padding: 4px 8px;
+  width: 79px;
+  height: 20px;
+  min-width: 60px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.nickname-label {
+  color: #6c757d; /* a subtle grey that looks elegant */
+  font-weight: bold;
+  font-size: 0.9em;
+  margin-left: 2px;
+  
 }
 
 </style>
-
-
-
 </head>
 <body>
   <header class="site-header">
@@ -554,6 +624,7 @@ h4 {
 
   <div class="container">
     <h2 class="tree-title">Family Tree</h2>
+    
 
     <div class="tree-header">
       <a href="{{ url_for('dashboard') }}" class="btn btn-back">← Back to Dashboard</a>
@@ -561,16 +632,11 @@ h4 {
     
 <div class="tree-search">
   <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Search member by name..." />
+    <input type="text" id="searchInput" placeholder="Search member by Name or Nickname" />
     <button id="searchBtn" class="btn btn-add" title="Search">Search</button>
   </div>
   <div id="searchResultMsg" style="margin-top: 10px; color: var(--primary-dark); font-weight: 600;"></div>
 </div>
-
-
-
-
-
   {% macro render_member(member_id, tree, collapsed=True) %}
     {% set member = tree[member_id]["member"] %}
     <div class="member-box" data-member="{{ member.id }}">
@@ -579,11 +645,12 @@ h4 {
       {% else %}
         <img src="https://via.placeholder.com/100" alt="No Photo">
       {% endif %}
-
-      <h3>
+<h3>
   {{ member.name }}
   {% if member.is_late %}
     <span class="late-label">(Late)</span>
+  {% elif member.nickname %}
+    <span class="nickname-label">({{ member.nickname }})</span>
   {% endif %}
 </h3>
 
@@ -596,6 +663,7 @@ h4 {
       {% if current_user.role in ["Admin", "Contributor"] %}
         <button type="button" class="btn btn-add toggle-actions-btn">Add / Update</button>
         <div class="member-actions hidden">
+          
           {% if not member.is_spouse %}
             <a href="{{ url_for('add_member', related_to=member.id, relation='child') }}" class="btn btn-add">Add Child</a>
             {% if member.gender == 'Male' %}
@@ -635,8 +703,6 @@ h4 {
     {% endfor %}
   </div>
 {% endif %}
-
-
         
       </div>
     </div>
@@ -659,11 +725,6 @@ h4 {
     ↑
   </button>
 </div>
-
-
-
-
-
 <div id="sidebar">
   <span id="closeBtn">&times;</span>
   
@@ -677,7 +738,11 @@ h4 {
     <a href="{{ url_for('admin') }}"
        class="{% if mode == 'admin' %}active-sidebar{% endif %}">Manage Users</a>
   {% endif %}
-  
+  <a href="{{ url_for('bloodgroup_page') }}"
+   class="{% if mode == 'bloodgroup' %}active-sidebar{% endif %}">
+   Blood Group
+</a>
+
   <a href="{{ url_for('logout') }}">Logout</a>
 </div>
 <script>
@@ -698,51 +763,36 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const memberBoxes = document.querySelectorAll(".member-box");
     const familySections = document.querySelectorAll(".family-section");
-    const toggleButtons = document.querySelectorAll(".toggle-family");
+    const toggles = document.querySelectorAll(".toggle-family");
 
     if (term !== "") {
-      // Hide all initially
+      // Show all members and expand all family sections
       memberBoxes.forEach(box => {
-        box.style.display = "none";
-        box.classList.remove("highlighted");
+        box.style.display = "block";        // show all members
+        box.classList.remove("highlighted"); // remove previous highlights
       });
 
+      familySections.forEach(section => {
+        section.classList.remove("hidden"); // fully expand all family branches
+      });
+
+      toggles.forEach(toggle => {
+        toggle.textContent = "Hide Family ▲"; // update toggles to expanded state
+      });
+
+      // Highlight matching members and collect matches
       memberBoxes.forEach(box => {
         const nameElement = box.querySelector("h3");
         if (nameElement) {
           const nameText = nameElement.textContent.toLowerCase();
           if (nameText.includes(term)) {
-            box.style.display = "block";
             box.classList.add("highlighted");
             matches.push(box);
-
-            // Expand ancestors
-            let parent = box.parentElement;
-            while (parent) {
-              if (parent.classList.contains("family-section")) {
-                parent.classList.remove("hidden");
-              }
-              if (parent.classList.contains("member-box")) {
-                const toggle = parent.querySelector(".toggle-family");
-                if (toggle) {
-                  toggle.textContent = "Hide Family ▲";
-                }
-                parent.style.display = "block";
-              }
-              parent = parent.parentElement;
-            }
           }
         }
       });
 
-      familySections.forEach(section => {
-        section.classList.remove("hidden");
-      });
-
-      toggleButtons.forEach(btn => {
-        btn.textContent = "Hide Family ▲";
-      });
-
+      // Show feedback & navigation buttons
       if (matches.length > 0) {
         searchResultMsg.textContent = `${matches.length} ${matches.length === 1 ? "person" : "people"} found.`;
         nextMatchBtn.style.display = matches.length > 1 ? "inline-block" : "none";
@@ -755,21 +805,56 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
     } else {
-      // Reset all
+      // Reset all member boxes to visible and remove highlights
       memberBoxes.forEach(box => {
         box.style.display = "block";
         box.classList.remove("highlighted");
       });
+
+      // Collapse all family sections (hide children/spouses)
       familySections.forEach(section => {
         section.classList.add("hidden");
       });
-      toggleButtons.forEach(btn => {
-        btn.textContent = "Show Family ▼";
+
+      // Reset toggle buttons to "Show Family ▼"
+      toggles.forEach(toggle => {
+        toggle.textContent = "Show Family ▼";
       });
+
+      // Clear search result message
+      searchResultMsg.textContent = "";
+
+      // Hide navigation buttons
       nextMatchBtn.style.display = "none";
       scrollTopBtn.style.display = "none";
-      searchResultMsg.textContent = "";
     }
+  }
+
+  function expandDescendants(box) {
+    // Recursively expand all nested children
+    const sections = box.querySelectorAll(".family-section");
+    sections.forEach(section => {
+      section.classList.remove("hidden");
+      const toggle = section.previousElementSibling;
+      if (toggle && toggle.classList.contains("toggle-family")) {
+        toggle.textContent = "Hide Family ▲";
+      }
+    });
+  }
+
+  function scrollToBox(box) {
+    document.querySelectorAll(".member-box").forEach(b => b.classList.remove("active-scroll"));
+
+    const boxRect = box.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const targetTop = scrollTop + boxRect.top - (window.innerHeight / 2);
+
+    window.scrollTo({
+      top: targetTop,
+      behavior: "smooth"
+    });
+
+    box.classList.add("active-scroll");
   }
 
   if (searchBtn) {
@@ -783,10 +868,15 @@ document.addEventListener("DOMContentLoaded", function() {
         runSearch();
       }
     });
+    searchInput.addEventListener("keyup", function() {
+      if (searchInput.value.trim() === "") {
+        runSearch(); // Reset the tree view when search is cleared
+      }
+    });
   }
 
   if (nextMatchBtn) {
-    nextMatchBtn.addEventListener("click", function () {
+    nextMatchBtn.addEventListener("click", function() {
       if (matches.length > 0) {
         currentMatchIndex = (currentMatchIndex + 1) % matches.length;
         scrollToBox(matches[currentMatchIndex]);
@@ -803,22 +893,59 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  function scrollToBox(box) {
-    document.querySelectorAll(".member-box").forEach(b => b.classList.remove("active-scroll"));
-
-    const boxRect = box.getBoundingClientRect();
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const targetTop = scrollTop + boxRect.top - (window.innerHeight / 2) + (boxRect.height / 2);
-
-    window.scrollTo({
-      top: targetTop,
-      behavior: "smooth"
+  // Toggle family section show/hide on click
+  document.querySelectorAll(".toggle-family").forEach(function(toggle) {
+    toggle.addEventListener("click", function() {
+      const section = this.nextElementSibling;
+      if (section.classList.contains("hidden")) {
+        section.classList.remove("hidden");
+        this.textContent = "Hide Family ▲";
+      } else {
+        section.classList.add("hidden");
+        this.textContent = "Show Family ▼";
+      }
     });
+  });
 
-    box.classList.add("active-scroll");
-  }
+  // Toggle Add / Update buttons inside member boxes
+  document.addEventListener("click", function(e) {
+    if (e.target && e.target.classList.contains("toggle-actions-btn")) {
+      console.log("Toggle button clicked");
+
+      const btn = e.target;
+      const memberBox = btn.closest(".member-box");
+      if (!memberBox) {
+        console.log("No member box found!");
+        return;
+      }
+
+      const actions = memberBox.querySelector(".member-actions");
+      if (actions) {
+        actions.classList.toggle("hidden");
+        console.log("Toggled hidden class. Now hidden?", actions.classList.contains("hidden"));
+      } else {
+        console.log("No .member-actions element found inside member box.");
+      }
+    }
+  });
+  const sidebar = document.getElementById("sidebar");
+const menuBtn = document.getElementById("menuBtn");
+const closeBtn = document.getElementById("closeBtn");
+
+if (menuBtn && sidebar) {
+  menuBtn.addEventListener("click", function () {
+    sidebar.style.left = "0"; // slide in
+  });
+}
+
+if (closeBtn && sidebar) {
+  closeBtn.addEventListener("click", function () {
+    sidebar.style.left = "-250px"; // slide out
+  });
+}
+
 });
-</script>
 
+</script>
 </body>
 </html>

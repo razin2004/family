@@ -37,7 +37,7 @@ html {
 
 body {
   margin: 0;
-  background: var(--background);
+background: #f0f0f0;
   font-family: 'Segoe UI', sans-serif;
   color: var(--text);
   line-height: 1.5;
@@ -98,7 +98,7 @@ header, h1, h2, h3, h4 {
   background: var(--white);
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
   border: 1px solid #e0e0e0;
 }
 
@@ -267,8 +267,9 @@ table tr:hover {
   font-size: 28px;
   cursor: pointer;
 }
+
 #sidebar a.active-sidebar {
-  background: #28a745; /* bright green */
+  background: #28a745;
   color: #fff;
 }
 
@@ -324,22 +325,26 @@ table tr:hover {
   }
 
   .container {
-    width: 100%;
-    margin: 20px auto;
-    padding: 20px;
-    box-shadow: none;
-    border-radius: 0;
-  }
+  width: 97%;
+  margin: 0px auto;
+  padding: 20px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--light-border);
+  border-radius: 8px;
+}
+.container h2 {
+  color: var(--primary);
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
 
-  #sidebar {
-    width: 220px;
-    padding-top: 50px;
-  }
 
-  #sidebar a {
-    font-size: 1.2rem;
-    padding: 14px 18px;
-  }
+
+  
 
   .table-responsive {
     width: 100%;
@@ -377,6 +382,137 @@ table td {
   }
 }
 
+.shift-right {
+  margin-left: 15px;
+}
+
+@media (max-width: 600px) {
+  .shift-right {
+    margin-left: 0px;
+  }
+  .container .btn.btn-primary {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  display: inline-block;
+  width: 130px;       /* or whatever size you prefer */
+}
+
+
+}
+/* First Profile Container */
+.first-profile-container {
+  max-width: 600px;
+  margin: 60px auto;
+  background: var(--white);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border: 1px solid var(--light-border);
+}
+
+.first-profile-container h2 {
+  color: var(--primary);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.first-profile-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.first-profile-container input[type="text"],
+.first-profile-container button {
+  font-size: 1rem;
+  padding: 12px 16px;
+  border-radius: 5px;
+  border: 1px solid var(--light-border);
+}
+
+.first-profile-container input[type="text"]:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(0,123,182,0.2);
+}
+
+.first-profile-container button {
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.first-profile-container button:hover {
+  background: var(--primary-dark);
+}
+
+/* Video styling */
+.first-profile-container video,
+.first-profile-container canvas {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  display: block;
+  border-radius: 8px;
+  border: 1px solid var(--light-border);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .first-profile-container {
+    margin: 30px 10px;
+    padding: 20px;
+  }
+  .first-profile-container h2 {
+    font-size: 1.5rem;
+  }
+}
+.contain {
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 40px 30px;
+  background: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border: 1px solid var(--light-border);
+}
+
+.contain h2 {
+  color: var(--primary);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.contain p {
+  color: var(--secondary-dark);
+  font-size: 1.1rem;
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .contain {
+    margin: 40px 10px;
+    padding: 25px 15px;
+  }
+
+  .contain h2 {
+    font-size: 1.5rem;
+  }
+
+  .contain p {
+    font-size: 1rem;
+  }
+}
 
 
 </style>
@@ -391,7 +527,9 @@ table td {
   {% else %}
     <span class="menu-placeholder"></span>
   {% endif %}
-  <span class="site-title">Family Portal</span>
+<span class="site-title {% if mode == 'admin' %}shift-right{% endif %}">
+  Family Portal
+</span>
   {% if mode != "login" %}
     <span class="menu-placeholder"></span>
   {% else %}
@@ -403,15 +541,7 @@ table td {
 
 
 
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul>
-      {% for msg in messages %}
-        <li>{{ msg }}</li>
-      {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
+  
 
   {% if mode == "login" %}
   <div class="container">
@@ -428,44 +558,28 @@ table td {
   </div>
   {% endif %}
 
-  {% if mode == "first_profile" %}
+ {% if mode == "first_profile" %}
+  <div class="first-profile-container">
     <h2>First Login - Complete Your Profile</h2>
-    <form method="POST" onsubmit="return captureSelfie()">
-      <input type="text" name="name" placeholder="Full Name" required><br>
-      <video id="video" width="320" height="240" autoplay></video><br>
-      <button type="button" onclick="takePhoto()">Capture Selfie</button><br>
+    <form method="POST" onsubmit="return validateAndCaptureSelfie()">
+      <input type="text" name="name" id="nameInput" placeholder="Full Name" required>
+
+      <video id="video" autoplay></video>
+      <button type="button" onclick="takePhoto()">Capture Selfie</button>
       <canvas id="canvas" width="320" height="240" class="hidden"></canvas>
       <input type="hidden" name="selfie" id="selfieInput">
+
       <button type="submit">Submit</button>
     </form>
+  </div>
+{% endif %}
 
-    <script>
-      const video = document.getElementById('video');
-      navigator.mediaDevices.getUserMedia({video: true}).then(stream => {
-        video.srcObject = stream;
-      });
-
-      function takePhoto() {
-        const canvas = document.getElementById('canvas');
-        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-        document.getElementById('selfieInput').value = canvas.toDataURL('image/png');
-        alert("Selfie captured!");
-      }
-
-      function captureSelfie() {
-        if (!document.getElementById('selfieInput').value) {
-          alert("Please capture a selfie!");
-          return false;
-        }
-        return true;
-      }
-    </script>
-  {% endif %}
-
-  {% if mode == "pending" %}
+{% if mode == "pending" %}
+  <div class="contain">
     <h2>Your account is awaiting admin approval.</h2>
     <p>We’ll notify you once it’s approved.</p>
-  {% endif %}
+  </div>
+{% endif %}
 
  {% if mode == "dashboard" and user %}
 
@@ -629,7 +743,11 @@ document.getElementById("closeBtn")?.addEventListener("click", () => {
     <a href="{{ url_for('admin') }}"
        class="{% if mode == 'admin' %}active-sidebar{% endif %}">Manage Users</a>
   {% endif %}
-  
+  <a href="{{ url_for('bloodgroup_page') }}"
+   class="{% if mode == 'bloodgroup' %}active-sidebar{% endif %}">
+   Blood Group
+</a>
+
   <a href="{{ url_for('logout') }}">Logout</a>
 </div>
 
@@ -643,6 +761,50 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("sidebar").style.left = "-250px";
   });
 });
+const video = document.getElementById('video');
+  if (video) {
+    navigator.mediaDevices.getUserMedia({video: true}).then(stream => {
+      video.srcObject = stream;
+    });
+  }
+
+  function takePhoto() {
+    const canvas = document.getElementById('canvas');
+    const video = document.getElementById('video');
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    document.getElementById('selfieInput').value = canvas.toDataURL('image/png');
+    alert("Selfie captured!");
+  }
+
+  function validateAndCaptureSelfie() {
+    const nameInput = document.getElementById('nameInput');
+    let nameValue = nameInput.value.trim();
+
+    // Remove multiple spaces
+    nameValue = nameValue.replace(/\s+/g, ' ');
+
+    // Check for only letters and spaces
+    const nameRegex = /^[A-Za-z\s]+$/;
+    if (!nameRegex.test(nameValue)) {
+      alert("Name must contain only letters and spaces.");
+      return false;
+    }
+
+    // Capitalize each word
+    nameValue = nameValue
+      .split(" ")
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+      .join(" ");
+
+    nameInput.value = nameValue;
+
+    if (!document.getElementById('selfieInput').value) {
+      alert("Please capture a selfie!");
+      return false;
+    }
+
+    return true;
+  }
 </script>
 
 

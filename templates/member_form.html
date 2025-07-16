@@ -11,6 +11,8 @@
     --white: #fff;
     --text: #333;
     --light-border: #e0e0e0;
+      --warning-dark: #d78b0d;
+
   }
 
   body {
@@ -128,12 +130,37 @@
       font-size: 1rem;
     }
   }
+  
+.alert-container {
+  margin-bottom: 20px;
+}
+.alert {
+  color: var(  --warning-dark);
+  
+  padding: 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+}
+
+
 </style>
 
 </head>
 <body>
   <h2>{% if mode=="edit" %}Edit{% else %}Add{% endif %} Family Member</h2>
-  
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert-container">
+      {% for message in messages %}
+        <div class="alert">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
   <form method="POST" enctype="multipart/form-data">
     
     <label for="name">Full Name *</label>
@@ -145,6 +172,16 @@
       value="{{ member.name if mode=='edit' else '' }}"
       {% if mode == 'edit' %}readonly{% endif %}
     >
+   
+<label for="nickname">Nickname</label>
+<input 
+  type="text" 
+  name="nickname" 
+  id="nickname" 
+  value="{{ member.nickname if mode == 'edit' and member.nickname else '' }}"
+>
+
+
 
     <label for="gender">Gender *</label>
     {% if mode == "edit" %}
@@ -174,13 +211,25 @@
 
     <label for="dob">Date of Birth *</label>
     <input 
-      type="date" 
-      name="dob" 
-      id="dob" 
-      required 
-      value="{{ member.dob if mode=='edit' else '' }}"
-      {% if mode == 'edit' %}readonly{% endif %}
+  type="date" 
+  name="dob" 
+  id="dob" 
+  {% if mode == 'edit' and member.dob %}readonly{% endif %}
+  value="{{ member.dob if mode=='edit' else '' }}"
+/>
+
+    <div class="form-checkbox">
+  <label for="dob_unknown">
+    Date of Birth Unknown
+    <input
+      type="checkbox"
+      name="dob_unknown"
+      id="dob_unknown"
+      {% if mode == 'edit' and member.dob == None %}checked{% endif %}
     >
+  </label>
+</div>
+
 
     <label for="blood_group">Blood Group</label>
     <select name="blood_group" id="blood_group">
@@ -221,5 +270,72 @@
   </form>
 
   <p><a href="{{ url_for('tree') }}">Back to Tree</a></p>
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  function formatWords(input) {
+    // Remove leading/trailing spaces
+    let value = input.value.trim();
+
+    // Replace multiple spaces with a single space
+    value = value.replace(/\s+/g, " ");
+
+    // Capitalize first letter of each word
+    value = value
+      .split(" ")
+      .map(word => {
+        if (word.length > 0) {
+          return word[0].toUpperCase() + word.slice(1).toLowerCase();
+        }
+        return "";
+      })
+      .join(" ");
+
+    input.value = value;
+  }
+
+  // IDs of inputs to format
+  const fields = ["name", "nickname", "job_or_education"];
+
+  fields.forEach(id => {
+    const input = document.getElementById(id);
+    if (input) {
+      // Format on blur
+      input.addEventListener("blur", () => formatWords(input));
+
+      // Optionally format on change too
+      input.addEventListener("change", () => formatWords(input));
+    }
+  });
+
+  // Restrict DOB to today or earlier
+  const dobInput = document.getElementById("dob");
+  if (dobInput) {
+    const today = new Date().toISOString().split("T")[0];
+    dobInput.setAttribute("max", today);
+  }
+});
+document.addEventListener("DOMContentLoaded", function () {
+  const dobUnknownCheckbox = document.getElementById("dob_unknown");
+  const dobInput = document.getElementById("dob");
+
+  function toggleDOBField() {
+    if (dobUnknownCheckbox.checked) {
+      dobInput.value = "";
+      dobInput.disabled = true;
+    } else {
+      dobInput.disabled = false;
+    }
+  }
+
+  if (dobUnknownCheckbox) {
+    toggleDOBField();
+
+    dobUnknownCheckbox.addEventListener("change", toggleDOBField);
+  }
+});
+
+</script>
+
 </body>
 </html>

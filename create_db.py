@@ -32,6 +32,7 @@ cur.execute("""
 CREATE TABLE family_members (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
+    nickname TEXT,
     is_late INTEGER DEFAULT 0,
     dob TEXT,
     gender TEXT,
@@ -39,6 +40,8 @@ CREATE TABLE family_members (
     job_or_education TEXT,
     selfie_path TEXT
 );
+
+
 
 """)
 
