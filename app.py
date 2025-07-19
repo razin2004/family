@@ -3,24 +3,65 @@ import re
 import random
 import string
 from base64 import b64decode
-from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from flask_mail import Mail, Message
 import sqlite3
 from datetime import timedelta
 from flask import session
-
+from flask import Flask, request
+from flask_babel import Babel, _
 from flask import Flask, render_template, jsonify, request
 import sqlite3
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from flask import Flask, request, session
+from flask_babel import Babel, _
+from datetime import timedelta
+
+cloudinary.config(
+    cloud_name="dxdy5tsju",
+    api_key="623749966712191",
+    api_secret="738I7WE3S60JYB5IH4eD4Lvrddg"
+)
 
 # SUPER ADMIN email
 SUPER_ADMIN_EMAIL = "doctorbooksystem@gmail.com"
 
+
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
+babel = Babel(app)
 
-# set remember me cookie duration
-app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=15)
+
+@babel.localeselector
+@babel.localeselector
+def get_locale():
+    lang = request.args.get('lang')
+    if lang in ['en', 'ml']:
+        session['lang'] = lang
+        return lang
+    return session.get('lang', 'en')
+
+@app.before_request
+def set_language():
+    lang = request.args.get('lang')
+    if lang in ['en', 'ml']:
+        session['lang'] = lang
+
+@app.route('/set_language/<lang_code>')
+def set_language(lang_code):
+    session['lang'] = lang_code
+    return redirect(request.referrer or url_for('login'))
+
+@app.context_processor
+def inject_locale():
+    return dict(get_locale=get_locale)
+
+
 
 @app.before_request
 def make_session_permanent():
@@ -45,14 +86,14 @@ mail = Mail(app)
 
 
 
-# Ensure selfies folder exists
-if not os.path.exists("selfies"):
-    os.mkdir("selfies")
+# # Ensure selfies folder exists
+# if not os.path.exists("selfies"):
+#     os.mkdir("selfies")
 
-# Serve selfies as static files
-@app.route("/selfies/<path:filename>")
-def selfies(filename):
-    return send_from_directory("selfies", filename)
+# # Serve selfies as static files
+# @app.route("/selfies/<path:filename>")
+# def selfies(filename):
+#     return send_from_directory("selfies", filename)
 
 # Helper: DB connection + create tables if missing
 def get_db():
@@ -144,19 +185,26 @@ def home():
 def login():
     db = get_db()
     otp_sent = False
-    email = None
+    lang = session.get("lang", "en")
+
+    # Pre-fill from query string if redirected via lang switch
+    email = request.args.get("email") or None
+    otp_input = request.args.get("otp") or None
+    action = request.args.get("action") or None
+    # Ensure otp_sent stays True when switching language after sending OTP
+    if action == "send_otp" and email:
+        otp_sent = True
+
 
     if request.method == "POST":
         email = request.form.get("email")
-        action = request.form.get("action")
         otp_input = request.form.get("otp")
+        action = request.form.get("action")
 
         if action == "send_otp":
             if not email:
-                flash("Please enter your email.")
-                return render_template("single_page.html", mode="login",
-    
-    user=current_user)
+                flash(_("Please enter your email."))
+                return render_template("single_page.html", mode="login", lang=lang, user=current_user)
 
             user = db.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
 
@@ -177,48 +225,27 @@ def login():
                 msg = Message("Your OTP Code", recipients=[email])
                 msg.body = f"Your OTP is: {otp}"
                 mail.send(msg)
-                flash("OTP sent to your email.")
+                flash(_("OTP sent to your email."))
             except Exception as e:
-                flash(f"Email error: {e}")
-                return render_template("single_page.html", mode="login",
-      
-    
-    user=current_user)
+                flash(_("Email error: ") + str(e))
+                return render_template("single_page.html", lang=lang, mode="login", user=current_user)
 
             otp_sent = True
-            return render_template(
-                "single_page.html",
-                mode="login",
-                otp_sent=otp_sent,
-                email=email,
-      
-    
-    user=current_user
-            )
+            return render_template("single_page.html", lang=lang, mode="login", otp_sent=True, email=email, user=current_user)
 
         elif action == "login":
             if not otp_input:
-                flash("Please enter the OTP.")
-                return render_template("single_page.html", mode="login", otp_sent=True, email=email,
-      
-   
-    user=current_user)
+                flash(_("Please enter the OTP."))
+                return render_template("single_page.html", lang=lang, mode="login", otp_sent=True, email=email, user=current_user)
 
-            otp_row = db.execute(
-                "SELECT * FROM otps WHERE email=? AND otp_code=?",
-                (email, otp_input)
-            ).fetchone()
+            otp_row = db.execute("SELECT * FROM otps WHERE email=? AND otp_code=?", (email, otp_input)).fetchone()
 
             if otp_row:
                 user = db.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
 
                 if user["email"] == SUPER_ADMIN_EMAIL:
-                    db.execute(
-                        "UPDATE users SET is_verified=1, is_approved=1 WHERE email=?",
-                        (email,)
-                    )
+                    db.execute("UPDATE users SET is_verified=1, is_approved=1 WHERE email=?", (email,))
                     db.commit()
-                    user = db.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
 
                 db.execute("UPDATE users SET is_verified=1 WHERE email=?", (email,))
                 db.commit()
@@ -228,29 +255,21 @@ def login():
 
                 if user["role"] == "Admin" and user["email"] == SUPER_ADMIN_EMAIL:
                     login_user(User(user), remember=True)
-                    flash("Logged in as super admin.")
-                    return redirect(url_for("dashboard"))
+                    flash(_("Logged in as super admin."))
+                    return redirect(url_for("dashboard", lang=lang))
+
                 elif user["is_approved"]:
                     login_user(User(user), remember=True)
-                    flash("Login successful.")
-                    return redirect(url_for("dashboard"))
+                    flash(_("Login successful."))
+                    return redirect(url_for("dashboard", lang=lang))
                 else:
-                    return render_template("single_page.html", mode="pending",
-      
-    
-    user=current_user)
+                    return render_template("single_page.html", lang=lang, mode="pending", user=current_user)
             else:
-                flash("Invalid OTP.")
-                return render_template("single_page.html", mode="login", otp_sent=True, email=email,
-      
-    
-    user=current_user)
+                flash(_("Invalid OTP."))
+                return render_template("single_page.html", lang=lang, mode="login", otp_sent=True, email=email, user=current_user)
 
-    return render_template("single_page.html", mode="login", otp_sent=False,
-      
-   
-    user=current_user)
-
+    # Default GET render
+    return render_template("single_page.html", lang=lang, mode="login", otp_sent=otp_sent, email=email, otp=otp_input, user=current_user)
 
 @app.route("/verify_otp/<email>", methods=["GET", "POST"])
 def verify_otp(email):
@@ -325,11 +344,17 @@ def first_profile(email):
     
     user=current_user)
 
+        import io
+        from base64 import b64decode
+
         img_str = re.search(r'base64,(.*)', selfie_data).group(1)
         img_bytes = b64decode(img_str)
-        filepath = f"selfies/{email.replace('@','_')}.png"
-        with open(filepath, "wb") as f:
-            f.write(img_bytes)
+
+# Use BytesIO stream for Cloudinary upload
+        img_stream = io.BytesIO(img_bytes)
+        result = cloudinary.uploader.upload(img_stream, resource_type="image")
+        filepath = result.get("secure_url")
+
 
         db.execute(
             "UPDATE users SET name=?, selfie_path=? WHERE email=?",
@@ -479,11 +504,11 @@ def add_member():
             "SELECT gender FROM family_members WHERE id = ?",
             (related_to,)
         ).fetchone()
-        if related_member:
-            if related_member["gender"] == "Male":
-                default_gender = "Female"
-            elif related_member["gender"] == "Female":
-                default_gender = "Male"
+        if related_member["gender"] == "Male":
+            default_gender = _("Female")
+        elif related_member["gender"] == "Female":
+            default_gender = _("Male")
+
 
     blood_groups = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"]
 
@@ -512,8 +537,9 @@ def add_member():
         photo_file = request.files.get("photo")
         selfie_path = None
         if photo_file and photo_file.filename:
-            selfie_path = f"selfies/member_{random.randint(10000,99999)}.png"
-            photo_file.save(selfie_path)
+            result = cloudinary.uploader.upload(photo_file)
+            selfie_path = result.get("secure_url")
+
 
         cur = db.execute("""
             INSERT INTO family_members
@@ -590,8 +616,9 @@ def edit_member(member_id):
         selfie_path = member["selfie_path"]  # Keep existing if no new upload
 
         if photo_file and photo_file.filename:
-            selfie_path = f"selfies/member_{random.randint(10000,99999)}.png"
-            photo_file.save(selfie_path)
+                result = cloudinary.uploader.upload(photo_file)
+                selfie_path = result.get("secure_url")
+
 
         # Update the existing member in DB
         db.execute("""
@@ -761,9 +788,14 @@ def search_by_blood_group():
         })
 
     return jsonify({"members": members})
+@app.route("/validate_dob_status", methods=["POST"])
+def validate_dob_status():
+    is_late = request.json.get("is_late", False)
+    dob_unknown = request.json.get("dob_unknown", False)
 
-
-
+    if dob_unknown and not is_late:
+        return jsonify({"warning": "Please confirm if the person is deceased when DOB is unknown."})
+    return jsonify({"warning": ""})
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)

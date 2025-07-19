@@ -1,11 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ get_locale() }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
   <title>Family Portal</title>
   <style>
+  /* Malayalam (ml) language-specific layout tweaks without changing font */
+html[lang="ml"] body {
+  letter-spacing: 0.4px;
+  word-spacing: 1px;
+  line-height: 1.75;
+}
+
+html[lang="ml"] .btn {
+  padding: 12px 20px;
+  font-size: 0.8rem;
+  white-space: normal;
+  text-align: center;
+}
+
+html[lang="ml"] .container h2,
+html[lang="ml"] .first-profile-container h2,
+html[lang="ml"] .contain h2 {
+  font-size: 1.1rem;
+  letter-spacing: 0.3px;
+}
+
+html[lang="ml"] .site-title {
+  font-size: 1.54rem;
+}
+
+/* ✅ Corrected media query block */
+@media (max-width: 600px) {
+  html[lang="ml"] .site-title {
+    font-size: 1.38rem;
+  }
+  
+  html[lang="ml"] .btn {
+    font-size: 0.6rem; /* 0.2rem was too small; adjust as needed */
+  }
+    html[lang="ml"] .btn btn-primary {
+    font-size: 0.3rem; /* 0.2rem was too small; adjust as needed */
+  }
+  
+}
+
+
   html, body {
   margin: 0;
   padding: 0;
@@ -342,10 +383,6 @@ table tr:hover {
   letter-spacing: 0.5px;
 }
 
-
-
-  
-
   .table-responsive {
     width: 100%;
     overflow-x: auto;
@@ -409,6 +446,7 @@ table td {
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   border: 1px solid var(--light-border);
+  
 }
 
 .first-profile-container h2 {
@@ -417,6 +455,7 @@ table td {
   font-weight: 700;
   margin-bottom: 30px;
   text-align: center;
+  
 }
 
 .first-profile-container form {
@@ -522,13 +561,13 @@ table td {
 <body>
 
  <header class="site-header">
-  {% if mode != "login" %}
+{% if mode != "login" and mode != "first_profile" %}
     <button id="menuBtn" class="menu-btn">☰</button>
   {% else %}
     <span class="menu-placeholder"></span>
   {% endif %}
 <span class="site-title {% if mode == 'admin' %}shift-right{% endif %}">
-  Family Portal
+  {{_('Family Portal')}}
 </span>
   {% if mode != "login" %}
     <span class="menu-placeholder"></span>
@@ -537,47 +576,77 @@ table td {
   {% endif %}
 </header>
 
-
-
-
-
-  
-
-  {% if mode == "login" %}
+ {% if mode == "login" %}
   <div class="container">
-    <h2>Login</h2>
-    <form method="POST">
-      <input type="email" name="email" placeholder="Email" value="{{ email or '' }}" required><br>
-      {% if otp_sent %}
-        <input type="text" name="otp" placeholder="Enter OTP" required><br>
-        <button type="submit" name="action" value="login" class="btn btn-primary">Login</button>
-      {% else %}
-        <button type="submit" name="action" value="send_otp" class="btn btn-primary">Send OTP</button>
-      {% endif %}
-    </form>
-  </div>
+    <h2>{{ _('Login') }}</h2>
+
+   <!-- Language dropdown selector -->
+<form method="POST" id="login-form">
+  <!-- Language Selector -->
+  <label for="language-select">{{ _('Language') }}</label>
+  <select id="language-select">
+    <option value="en" {% if session.get('lang') == 'en' %}selected{% endif %}>English</option>
+    <option value="ml" {% if session.get('lang') == 'ml' %}selected{% endif %}>മലയാളം</option>
+  </select>
+
+  <!-- Email Input -->
+  <input type="email" name="email" placeholder="{{ _('Email') }}" value="{{ email or '' }}" required><br>
+
+  {% if otp_sent %}
+    <input type="text" name="otp" placeholder="{{ _('Enter OTP') }}" value="{{ otp or '' }}" required><br>
+    <button type="submit" name="action" value="login" class="btn btn-primary">{{ _('Login') }}</button>
+  {% else %}
+    <button type="submit" name="action" value="send_otp" class="btn btn-primary">{{ _('Send OTP') }}</button>
   {% endif %}
+</form>
+
+<!-- JS to handle language change without clearing form -->
+<script>
+  document.getElementById('language-select').addEventListener('change', function () {
+    const selectedLang = this.value;
+
+    const form = document.getElementById('login-form');
+    const email = form.querySelector('input[name="email"]').value;
+    const otpField = form.querySelector('input[name="otp"]');
+    const otp = otpField ? otpField.value : '';
+    const action = form.querySelector('button[name="action"]').value;
+
+    const params = new URLSearchParams();
+    if (email) params.append('email', email);
+    if (otp) params.append('otp', otp);
+    if (action) params.append('action', action);
+    params.append('lang', selectedLang);
+
+    window.location.href = `/login?${params.toString()}`;
+  });
+</script>
+
+
+
+  </div>
+{% endif %}
+
 
  {% if mode == "first_profile" %}
   <div class="first-profile-container">
-    <h2>First Login - Complete Your Profile</h2>
+    <h2>{{_('First Login - Complete Your Profile')}}</h2>
     <form method="POST" onsubmit="return validateAndCaptureSelfie()">
-      <input type="text" name="name" id="nameInput" placeholder="Full Name" required>
+      <input type="text" name="name" id="nameInput" placeholder="{{_('Full Name')}}" required>
 
       <video id="video" autoplay></video>
-      <button type="button" onclick="takePhoto()">Capture Selfie</button>
+      <button type="button" onclick="takePhoto()">{{_('Capture Selfie')}}</button>
       <canvas id="canvas" width="320" height="240" class="hidden"></canvas>
       <input type="hidden" name="selfie" id="selfieInput">
 
-      <button type="submit">Submit</button>
+      <button type="submit">{{_('Submit')}}</button>
     </form>
   </div>
 {% endif %}
 
 {% if mode == "pending" %}
   <div class="contain">
-    <h2>Your account is awaiting admin approval.</h2>
-    <p>We’ll notify you once it’s approved.</p>
+    <h2>{{_('Your account is awaiting admin approval')}}.</h2>
+    <p>{{_('We’ll notify you once it’s approved')}}.</p>
   </div>
 {% endif %}
 
@@ -585,24 +654,25 @@ table td {
 
 
 <div class="container">
-  <h2>Welcome, {{ user.name }}!</h2>
+  <h2>{{_('Welcome')}}, {{ user.name }}!</h2>
   <div class="user-info">
-    <p><strong>Role:</strong> {{ user.role }}</p>
+   <p><strong>{{ _('Role') }}:</strong> {{ _(user.role) }}</p>
+
   </div>
 
   {% if user.role == "Admin" and (pending_count or 0) > 0 %}
     <div class="admin-actions">
-      <h3>Admin Actions</h3>
-      <p>You have <strong>{{ pending_count }}</strong> pending requests.</p>
+      <h3>{{_('Admin Actions')}}</h3>
+      <p>{{_('You have')}} <strong>{{ pending_count }}</strong> {{_('pending requests')}}.</p>
       <a href="{{ url_for('admin', filter='pending') }}" class="btn btn-warning">
-        Manage/Approve Users
+        {{_('Manage/Approve Users')}}
       </a>
     </div>
   {% endif %}
 
   <div style="margin-top:20px;">
     {% if user.role in ["Admin", "Contributor", "Viewer"] %}
-      <a href="{{ url_for('tree') }}" class="btn btn-primary">View Family Tree</a>
+      <a href="{{ url_for('tree') }}" class="btn btn-primary">{{_('View Family Tree')}}</a>
     {% endif %}
   </div>
 </div>
@@ -610,27 +680,27 @@ table td {
 
 
   {% if mode == 'admin' %}
-    <h2>User Management</h2>
+    <h2>{{_('User Management')}}</h2>
 
     <form method="get">
-      <label>Filter:</label>
+      <label>{{_('Filter')}}:</label>
       <select name="filter" onchange="this.form.submit()">
-        <option value="all" {% if current_filter == 'all' %}selected{% endif %}>All Users</option>
-        <option value="pending" {% if current_filter == 'pending' %}selected{% endif %}>Pending Approvals</option>
-        <option value="approved" {% if current_filter == 'approved' %}selected{% endif %}>Approved Users</option>
+        <option value="all" {% if current_filter == 'all' %}selected{% endif %}>{{_('All Users')}}</option>
+        <option value="pending" {% if current_filter == 'pending' %}selected{% endif %}>{{_('Pending Approvals')}}</option>
+        <option value="approved" {% if current_filter == 'approved' %}selected{% endif %}>{{_('Approved Users')}}</option>
       </select>
     </form>
 <div class="table-responsive">
     <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%; margin-top: 15px;">
       <tr>
-        <th>Email</th>
-        <th>Name</th>
-        <th>Image</th>
-        <th>Role</th>
-        <th>Verified</th>
-        <th>Approved</th>
-        <th>Change Role</th>
-        <th>Action</th>
+        <th>{{_('Email')}}</th>
+        <th>{{_('Name')}}</th>
+        <th>{{_('Image')}}</th>
+        <th>{{_('Role')}}</th>
+        <th>{{_('Verified')}}</th>
+        <th>{{_('Approved')}}</th>
+        <th>{{_('Change Role')}}</th>
+        <th>{{_('Action')}}</th>
       </tr>
       {% for user in users %}
       <tr>
@@ -641,12 +711,12 @@ table td {
             <button
               type="button"
               class="btn btn-secondary"
-              onclick="showOverlay('{{ url_for('selfies', filename=user.selfie_path.split('/')[-1]) }}', '{{ user.email }}')"
+                onclick="showOverlay('{{ user.selfie_path }}', '{{ user.email }}')"
             >
-              Show Image
+              {{_('Show Image')}}
             </button>
           {% else %}
-            <p>No photo uploaded.</p>
+            <p>{{_('No photo uploaded')}}.</p>
           {% endif %}
         </td>
         <td>{{ user.role }}</td>
@@ -656,27 +726,27 @@ table td {
           <form method="post" style="display:inline;">
             <input type="hidden" name="user_id" value="{{ user.id }}">
             <select name="role">
-              <option value="Viewer" {% if user.role == 'Viewer' %}selected{% endif %}>Viewer</option>
-              <option value="Contributor" {% if user.role == 'Contributor' %}selected{% endif %}>Contributor</option>
-              <option value="Admin" {% if user.role == 'Admin' %}selected{% endif %}>Admin</option>
+              <option value="Viewer" {% if user.role == 'Viewer' %}selected{% endif %}>{{_('Viewer')}}</option>
+              <option value="Contributor" {% if user.role == 'Contributor' %}selected{% endif %}>{{_('Contributor')}}</option>
+              <option value="Admin" {% if user.role == 'Admin' %}selected{% endif %}>{{_('Admin')}}</option>
             </select>
-            <button type="submit" name="action" value="update_role">Update</button>
+            <button type="submit" name="action" value="update_role">{{_('Update')}}</button>
           </form>
         </td>
         <td>
-          {% if user.email != SUPER_ADMIN_EMAIL and user.email != "razinmuhammed1999@gmail.com" %}
+          {% if user.email != SUPER_ADMIN_EMAIL and user.email != "razinnmuhammed1999@gmail.com" %}
             {% if current_filter == 'pending' %}
               <form method="post" style="display:inline;">
                 <input type="hidden" name="user_id" value="{{ user.id }}">
-                <button type="submit" name="action" value="approve">Approve</button>
+                <button type="submit" name="action" value="approve">{{_('Approve')}}</button>
               </form>
             {% endif %}
             <form method="post" style="display:inline;">
               <input type="hidden" name="user_id" value="{{ user.id }}">
-              <button type="submit" name="action" value="delete">Delete</button>
+              <button type="submit" name="action" value="delete">{{_('Delete')}}</button>
             </form>
           {% else %}
-            Protected
+            {{_('Protected')}}
           {% endif %}
         </td>
       </tr>
@@ -703,7 +773,7 @@ table td {
 
    function showOverlay(imageUrl, imageOwnerEmail) {
     // Block ALL others from viewing this specific protected user
-    if (imageOwnerEmail === "razinmuhammed1999@gmail.com" && currentUserEmail !== "razinmuhammed1999@gmail.com") {
+    if (imageOwnerEmail === "razinnmuhammed1999@gmail.com" && currentUserEmail !== "razinnmuhammed1999@gmail.com") {
         alert("You are not allowed to view this protected image.");
         return;
     }
@@ -734,21 +804,21 @@ document.getElementById("closeBtn")?.addEventListener("click", () => {
   <span id="closeBtn">&times;</span>
   
   <a href="{{ url_for('dashboard') }}"
-     class="{% if mode == 'dashboard' %}active-sidebar{% endif %}">Dashboard</a>
+     class="{% if mode == 'dashboard' %}active-sidebar{% endif %}">{{_('Dashboard')}}</a>
   
   <a href="{{ url_for('tree') }}"
-     class="{% if mode == 'tree' %}active-sidebar{% endif %}">View Family Tree</a>
+     class="{% if mode == 'tree' %}active-sidebar{% endif %}">{{_('View Family Tree')}}</a>
   
   {% if user.role == "Admin" %}
     <a href="{{ url_for('admin') }}"
-       class="{% if mode == 'admin' %}active-sidebar{% endif %}">Manage Users</a>
+       class="{% if mode == 'admin' %}active-sidebar{% endif %}">{{_('Manage Users')}}</a>
   {% endif %}
   <a href="{{ url_for('bloodgroup_page') }}"
    class="{% if mode == 'bloodgroup' %}active-sidebar{% endif %}">
-   Blood Group
+   {{_('Blood Group')}}
 </a>
 
-  <a href="{{ url_for('logout') }}">Logout</a>
+  <a href="{{ url_for('logout') }}">{{_('Logout')}}</a>
 </div>
 
 <script>
@@ -773,7 +843,7 @@ const video = document.getElementById('video');
     const video = document.getElementById('video');
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
     document.getElementById('selfieInput').value = canvas.toDataURL('image/png');
-    alert("Selfie captured!");
+    alert("{{_('Selfie captured')}}!");
   }
 
   function validateAndCaptureSelfie() {

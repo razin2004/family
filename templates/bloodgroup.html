@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ get_locale() }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Search People by Blood Group</title>
   <style>
+    html[lang="ml"] body {
+  letter-spacing: 0.4px;
+  word-spacing: 1px;
+  line-height: 1.75;
+    }
+  html[lang="ml"] .site-title {
+  font-size: 1.54rem;
+
+}
+@media (max-width: 600px) {
+
+    html[lang="ml"] table{
+      
+    margin-left: -34px;   /* Optional: Adjust margins for mobile */
+  }
+  html[lang="ml"] .site-title {
+  font-size: 1.38rem;
+
+}
+}
     :root {
         --danger: #dc3545;
       --primary: #0077b6;
@@ -152,13 +172,8 @@ margin-left: 12.7px;
   border: 1px solid var(--light-border);
   transition: box-shadow 0.3s ease;
 }
-@media (max-width: 600px) {
-  .container {
-    max-width: 100%;
-    margin: 10px;
-    padding: 20px;
-  }
-}
+
+
 
 .container:hover {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
@@ -216,6 +231,16 @@ table {
   overflow: hidden;
 }
 
+/* Media query for small screens */
+@media (max-width: 600px) {
+  table {
+    width: 100%;        /* Full width */
+    margin: 10px 0;   
+    margin-left: -10px;   /* Optional: Adjust margins for mobile */
+  }
+}
+
+
 th, td {
   padding: 14px 16px;
   text-align: left;
@@ -252,7 +277,7 @@ color: var(--danger);
     {% else %}
       <span class="menu-placeholder"></span>
     {% endif %}
-    <span class="site-title">Family Portal</span>
+    <span class="site-title">{{_('Family Portal')}}</span>
     {% if mode != "login" %}
       <span class="menu-placeholder"></span>
     {% else %}
@@ -262,11 +287,11 @@ color: var(--danger);
 
 
   <div class="container">
-    <h2>Search People by Blood Group</h2>
+    <h2>{{_('Search People by Blood Group')}}</h2>
 
     <div class="search-bar">
       <select id="bloodGroupSelect">
-        <option value="">Select Blood Group</option>
+        <option value="">{{_('Select Blood Group')}}</option>
         <option value="A+">A+</option>
         <option value="A-">A-</option>
         <option value="B+">B+</option>
@@ -276,7 +301,7 @@ color: var(--danger);
         <option value="AB+">AB+</option>
         <option value="AB-">AB-</option>
       </select>
-      <button id="searchBtn">Search</button>
+      <button id="searchBtn">{{_('Search')}}</button>
     </div>
 
     <div id="results"></div>
@@ -286,23 +311,24 @@ color: var(--danger);
     <span id="closeBtn">&times;</span>
 
     <a href="{{ url_for('dashboard') }}"
-       class="{% if mode == 'dashboard' %}active-sidebar{% endif %}">Dashboard</a>
+       class="{% if mode == 'dashboard' %}active-sidebar{% endif %}">{{_('Dashboard')}}</a>
 
     <a href="{{ url_for('tree') }}"
-       class="{% if mode == 'tree' %}active-sidebar{% endif %}">View Family Tree</a>
+       class="{% if mode == 'tree' %}active-sidebar{% endif %}">{{_('View Family Tree')}}</a>
 
     {% if user.role == "Admin" %}
       <a href="{{ url_for('admin') }}"
-         class="{% if mode == 'admin' %}active-sidebar{% endif %}">Manage Users</a>
+         class="{% if mode == 'admin' %}active-sidebar{% endif %}">{{_('Manage Users')}}</a>
     {% endif %}
 
     <a href="{{ url_for('bloodgroup_page') }}"
-       class="{% if mode == 'bloodgroup' %}active-sidebar{% endif %}">Blood Group</a>
+       class="{% if mode == 'bloodgroup' %}active-sidebar{% endif %}">{{_('Blood Group')}}</a>
 
-    <a href="{{ url_for('logout') }}">Logout</a>
+    <a href="{{ url_for('logout') }}">{{_('Logout')}}</a>
   </div>
 
   <script>
+    
     function calculateAge(dobString) {
       if (!dobString) return "-";
       const today = new Date();
@@ -321,11 +347,11 @@ color: var(--danger);
       resultsDiv.innerHTML = "";
 
       if (!selectedBG) {
-        resultsDiv.textContent = "Please select a blood group.";
+        resultsDiv.textContent = "{{_('Please select a blood group')}}.";
         return;
       }
 
-      resultsDiv.innerHTML = `<div class="message">Loading...</div>`;
+      resultsDiv.innerHTML = `<div class="message">{{_('Loading')}}...</div>`;
 
       fetch("/api/bloodgroup", {
         method: "POST",
@@ -339,7 +365,7 @@ color: var(--danger);
           const members = data.members;
 
           if (members.length === 0) {
-            resultsDiv.innerHTML = `<div class="message">No members found with this blood group.</div>`;
+            resultsDiv.innerHTML = `<div class="message">{{_('No members found with this blood group')}}.</div>`;
             return;
           }
 
@@ -347,10 +373,10 @@ color: var(--danger);
           const thead = document.createElement("thead");
           thead.innerHTML = `
             <tr>
-              <th>Name</th>
-              <th>Gender</th>
-              <th>Age</th>
-              <th>Blood Group</th>
+              <th>{{_('Name')}}</th>
+              <th>{{_('Gender')}}</th>
+              <th>{{_('Age')}}</th>
+              <th>{{_('Blood Group')}}</th>
             </tr>
           `;
           table.appendChild(thead);

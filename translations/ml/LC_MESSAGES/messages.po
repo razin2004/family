@@ -1,0 +1,403 @@
+# Malayalam translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: FamilyPortal 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-18 00:58+0530\n"
+"PO-Revision-Date: 2025-07-18 01:05+0530\n"
+"Last-Translator: Razin <your@email.com>\n"
+"Language: ml\n"
+"Language-Team: Malayalam\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "You have"
+msgstr "നിങ്ങൾക്ക്"
+
+msgid "pending requests"
+msgstr "ബാക്കി അപേക്ഷകൾ ഉണ്ട്"
+
+msgid "Family Tree"
+msgstr "കുടുംബ വൃക്ഷം"
+
+msgid "Family Portal"
+msgstr "കുടുംബ പോർട്ടൽ"
+
+msgid "Add Child"
+msgstr "മക്കളെ ചേർക്കുക"
+
+
+msgid "Add Husband"
+msgstr "ഭർത്താവിനെ ചേർക്കുക"
+
+msgid "Add Wife"
+msgstr "ഭാര്യയെ ചേർക്കുക"
+
+msgid "Edit"
+msgstr "തിരുത്തുക"
+
+msgid "Delete"
+msgstr "ഇല്ലാതാക്കുക"
+
+msgid "Name"
+msgstr "പേര്"
+
+msgid "Gender"
+msgstr "ലിംഗം"
+
+msgid "Date of Birth"
+msgstr "ജനനത്തീയതി"
+
+msgid "Blood Group"
+msgstr "രക്ത ഗ്രൂപ്പ്"
+
+msgid "Education / Job"
+msgstr "വിദ്യാഭ്യാസം / ജോലി"
+
+msgid "Upload Image"
+msgstr "ചിത്രം അപ്‌ലോഡ് ചെയ്യുക"
+
+msgid "Save"
+msgstr "സേവ് ചെയ്യുക"
+
+msgid "Cancel"
+msgstr "റദ്ദാക്കുക"
+
+msgid "Update"
+msgstr "പരിഷ്കരിക്കുക"
+
+msgid "Back to Dashboard"
+msgstr "ഡാഷ്‌ബോർഡിലേക്ക് മടങ്ങുക"
+
+msgid "Go to the page when starting"
+msgstr "ആരംഭിക്കുന്ന പേജ് തുറക്കുക"
+
+msgid "Search member by Name or Nickname"
+msgstr "വ്യക്തിയുടെ പേര്"
+
+msgid "Search"
+msgstr "തിരയുക"
+
+msgid "Member"
+msgstr "അംഗം"
+
+msgid "Add Family Member"
+msgstr "കുടുംബാംഗത്തെ ചേർക്കുക"
+
+msgid "Edit Family Member"
+msgstr "കുടുംബാംഗത്തെ തിരുത്തുക"
+
+msgid "Add Member"
+msgstr "അംഗത്തെ ചേർക്കുക"
+
+msgid "Spouse(s)"
+msgstr "ജീവിത പങ്കാളി(കൾ)"
+
+msgid "Children"
+msgstr "മക്കൾ"
+
+msgid "No root member found"
+msgstr "റൂട്ട് അംഗം കണ്ടെത്തിയില്ല"
+
+msgid "Next"
+msgstr "അടുത്തത്"
+
+msgid "Update Member"
+msgstr "അംഗത്തെ പുതുക്കുക"
+
+msgid "Male"
+msgstr "പുരുഷൻ"
+
+msgid "Female"
+msgstr "സ്ത്രീ"
+
+msgid "Job/Education"
+msgstr "ജോലി / വിദ്യാഭ്യാസം"
+
+msgid "DOB"
+msgstr "ജനനത്തീയതി"
+
+msgid "Add/Update"
+msgstr "ചേർക്കുക / പുതുക്കുക"
+
+msgid "Admin"
+msgstr "അഡ്മിൻ"
+
+msgid "Contributor"
+msgstr "സംഭാവകൻ"
+
+msgid "Viewer"
+msgstr "കാണുന്നവർ"
+
+msgid "Role"
+msgstr "പങ്ക്"
+
+msgid "Login"
+msgstr "ലോഗിൻ"
+
+msgid "Send OTP"
+msgstr "OTP അയയ്ക്കുക"
+
+msgid "Email"
+msgstr "ഇമെയിൽ"
+
+msgid "Capture Picture"
+msgstr "ചിത്രം പകർത്തുക"
+
+msgid "Confirm"
+msgstr "സ്ഥിരപ്പെടുത്തുക"
+
+msgid "Add"
+msgstr "ചേർക്കുക"
+
+msgid "Update"
+msgstr "പുതുക്കുക"
+
+msgid "Delete"
+msgstr "ഇല്ലാതാക്കുക"
+
+msgid "View Family Tree"
+msgstr "കുടുംബ വൃക്ഷം കാണുക"
+
+msgid "Dashboard"
+msgstr "ഡാഷ്‌ബോർഡ്"
+
+msgid "Logout"
+msgstr "ലോഗ് ഔട്ട് ചെയ്യുക"
+
+msgid "Blood Group"
+msgstr "രക്ത ഗ്രൂപ്പ്"
+
+msgid "Welcome"
+msgstr "സ്വാഗതം"
+
+msgid "Contributor"
+msgstr "സംഭാവകൻ"
+
+msgid "Viewer"
+msgstr "കാണുന്നവർ"
+
+
+
+msgid "View"
+msgstr "കാണുക"
+
+msgid "Enter OTP"
+msgstr "OTP നൽകുക"
+
+msgid "Manage Users"
+msgstr "ഉപയോക്താക്കളെ നിയന്ത്രിക്കുക"
+
+msgid "User Management"
+msgstr "ഉപയോക്തൃ നിയന്ത്രണം"
+
+msgid "Filter"
+msgstr "ഫിൽറ്റർ ചെയ്യുക"
+
+msgid "All Users"
+msgstr "എല്ലാ ഉപയോക്താക്കളും"
+
+msgid "Pending Approvals"
+msgstr "നിലവിലുള്ള അംഗീകാരം പ്രതീക്ഷിക്കുന്നു"
+
+msgid "Approved Users"
+msgstr "അംഗീകൃത ഉപയോക്താക്കൾ"
+
+msgid "Image"
+msgstr "ചിത്രം"
+
+msgid "Verified"
+msgstr "സ്ഥിരീകരിച്ചു"
+
+msgid "Approved"
+msgstr "അംഗീകരിച്ചു"
+
+msgid "Change Role"
+msgstr "പങ്ക് മാറ്റുക"
+
+msgid "Action"
+msgstr "നടപടി"
+
+msgid "Update"
+msgstr "പുതുക്കുക"
+
+msgid "Search People by Blood Group"
+msgstr "രക്ത ഗ്രൂപ്പ് ഉപയോഗിച്ച് ആളുകളെ തിരയുക"
+
+msgid "Select Blood Group"
+msgstr "രക്ത ഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക"
+
+msgid "Search"
+msgstr "തിരയുക"
+
+msgid "No members found with this blood group"
+msgstr "ഈ രക്ത ഗ്രൂപ്പിൽ അംഗങ്ങളെ കണ്ടെത്താനായില്ല"
+
+msgid "Age"
+msgstr "പ്രായം"
+
+msgid "Loading"
+msgstr "ലോഡിംഗ്"
+
+
+msgid "Show Family"
+msgstr "കുടുംബം കാണിക്കുക"
+
+msgid "No matching members found."
+msgstr "സാധുതയുള്ള അംഗങ്ങളെ കണ്ടെത്താനായില്ല"  # ← your translation
+
+msgid "none"
+msgstr "ഒന്നുമില്ല"
+
+msgid "maranappettu"
+msgstr "മരണപ്പെട്ട"
+
+msgid "Hide Family"
+msgstr "കുടുംബം മറയ്ക്കുക"
+
+msgid "Spouse(s)"
+msgstr "ജീവിത പങ്കാളി(കൾ)"
+
+msgid "Children"
+msgstr "മക്കൾ"
+
+msgid "Family Member"
+msgstr "കുടുംബാംഗം"
+
+msgid "Full Name"
+msgstr "പൂർണ്ണനാമം"
+
+msgid "Nickname"
+msgstr "അവതാരണ നാമം"
+
+msgid "Job / Education"
+msgstr "ജോലി / വിദ്യാഭ്യാസം"
+
+msgid "Select Gender"
+msgstr "ലിംഗം തിരഞ്ഞെടുക്കുക"
+
+msgid "Date of Birth"
+msgstr "ജനനത്തീയതി"
+
+msgid "Date of Birth Unknown"
+msgstr "ജനനത്തീയതി അറിയില്ല"
+
+msgid "Select Blood Group"
+msgstr "രക്ത ഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക"
+
+msgid "Upload Photo"
+msgstr "ചിത്രം അപ്‌ലോഡ് ചെയ്യുക"
+
+msgid "Mark as Late (Deceased)"
+msgstr "മരിച്ചവരായി അടയാളപ്പെടുത്തുക"
+
+msgid "Update"
+msgstr "പരിഷ്കരിക്കുക"
+
+msgid "Add"
+msgstr "ചേർക്കുക"
+
+msgid "Others"
+msgstr "മറ്റുള്ളവർ"
+
+msgid "Male"
+msgstr "ആൺ"
+
+msgid "Female"
+msgstr "പെൺ"
+
+
+msgid "Submit"
+msgstr "സമർപ്പിക്കുക"
+
+msgid "Capture Selfie"
+msgstr "സെൽഫി എടുക്കുക"
+
+msgid "First Login - Complete Your Profile"
+msgstr "ആദ്യം ലോഗിൻ ചെയ്യുമ്പോൾ - നിങ്ങളുടെ പ്രൊഫൈൽ പൂർത്തിയാക്കുക"
+
+msgid "Your account is awaiting admin approval"
+msgstr "നിങ്ങളുടെ അക്കൗണ്ട് അഡ്മിൻ അംഗീകാരം പ്രതീക്ഷിച്ചിരിക്കുന്നു"
+
+msgid "We’ll notify you once it’s approved"
+msgstr "അംഗീകരിച്ചതിനുശേഷം ഞങ്ങൾ നിങ്ങളെ അറിയിക്കും"
+
+msgid "Selfie captured"
+msgstr "സെൽഫി എടുത്തു"
+
+msgid "Admin Actions"
+msgstr "അഡ്മിൻ പ്രവർത്തികൾ"
+
+msgid "Manage/Approve Users"
+msgstr "ഉപയോക്താക്കളെ കൈകാര്യം ചെയ്യുക / അംഗീകരിക്കുക"
+
+msgid "All Users"
+msgstr "എല്ലാ ഉപയോക്താക്കളും"
+
+msgid "Pending Approvals"
+msgstr "അംഗീകരിക്കാൻ കാത്തിരിപ്പുള്ളവർ"
+
+msgid "Approved Users"
+msgstr "അംഗീകരിച്ച ഉപയോക്താക്കൾ"
+
+msgid "Change Role"
+msgstr "പദവി മാറ്റുക"
+
+msgid "Show Image"
+msgstr "ചിത്രം കാണിക്കുക"
+
+msgid "No photo uploaded"
+msgstr "ചിത്രം അപ്‌ലോഡ് ചെയ്തിട്ടില്ല"
+
+msgid "Protected"
+msgstr "രക്ഷിതം"
+
+msgid "Only late members can have Date of Birth marked as unknown"
+msgstr "ജനനത്തീയതി അറിയപ്പെടാത്തതായി അടയാളപ്പെടുത്തുന്നത് മരിച്ചവർക്ക് മാത്രമേ കഴിയൂ"
+
+msgid "Add / Update"
+msgstr "ചേർക്കുക / പുതുക്കുക"
+
+msgid "Show Family"
+msgstr "കുടുംബം കാണിക്കുക"
+
+msgid "Hide Family"
+msgstr "കുടുംബം മറയ്ക്കുക"
+
+msgid "User Management"
+msgstr "ഉപയോക്തൃ മാനേജ്മെന്റ്"
+
+msgid "admin"
+msgstr "അഡ്മിൻ"
+
+msgid "Please select a blood group"
+msgstr "രക്തഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക"
+
+msgid "Late"
+msgstr "മരണപ്പെട്ടു"
+
+msgid "person"
+msgstr "വ്യക്തിയെ"
+
+msgid "people"
+msgstr "വ്യക്തികളെ"
+
+msgid "members"
+msgstr "അംഗങ്ങളെ"
+
+msgid "found"
+msgstr "കണ്ടെത്തി"
+
+msgid "No matching members found"
+msgstr "പൊരുത്തമുള്ള അംഗങ്ങളെ കണ്ടെത്തിയില്ല"
+
+msgid "Back to Tree"
+msgstr "കുടുംബ വൃക്ഷത്തിലേക്ക് തിരിച്ചു പോകുക"
+
