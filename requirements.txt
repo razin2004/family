@@ -1,5 +1,5 @@
 Flask==3.0.2
 Flask-Login==0.6.3
 Flask-Mail==0.9.1
-flask-babel
+flask-babel==1.0.0
 cloudinary
