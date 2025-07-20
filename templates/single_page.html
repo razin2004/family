@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
-  <title>Family Portal</title>
+  <title>Keerikandy Family</title>
   <style>
   /* Malayalam (ml) language-specific layout tweaks without changing font */
 html[lang="ml"] body {
@@ -561,13 +561,13 @@ table td {
 <body>
 
  <header class="site-header">
-{% if mode != "login" and mode != "first_profile" %}
+{% if mode != "login" and mode != "first_profile" and mode != "pending" %}
     <button id="menuBtn" class="menu-btn">☰</button>
   {% else %}
     <span class="menu-placeholder"></span>
   {% endif %}
 <span class="site-title {% if mode == 'admin' %}shift-right{% endif %}">
-  {{_('Family Portal')}}
+  {{_('Keerikandy Family')}}
 </span>
   {% if mode != "login" %}
     <span class="menu-placeholder"></span>
@@ -583,11 +583,11 @@ table td {
    <!-- Language dropdown selector -->
 <form method="POST" id="login-form">
   <!-- Language Selector -->
-  <label for="language-select">{{ _('Language') }}</label>
+  <!-- <label for="language-select">{{ _('Language') }}</label>
   <select id="language-select">
     <option value="en" {% if session.get('lang') == 'en' %}selected{% endif %}>English</option>
     <option value="ml" {% if session.get('lang') == 'ml' %}selected{% endif %}>മലയാളം</option>
-  </select>
+  </select> -->
 
   <!-- Email Input -->
   <input type="email" name="email" placeholder="{{ _('Email') }}" value="{{ email or '' }}" required><br>
