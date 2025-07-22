@@ -698,8 +698,7 @@ h4 {
       {% if member.selfie_path %}
         <img src="{{ member.selfie_path }}" alt="Selfie">
       {% else %}
-        <img src="https://via.placeholder.com/100" alt="No Photo">
-      {% endif %}
+    <img src="{{ url_for('static', filename='images/default_profile.jpeg') }}" alt="Default Profile">{% endif %}
 <h3>
   {{ member.name }}
   {% if member.is_late %}

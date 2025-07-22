@@ -552,7 +552,101 @@ table td {
     font-size: 1rem;
   }
 }
+  .birthday-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(to right, #8be36e, #f37c06);
+  border: 1px solid #ddddea;
+  border-radius: 6px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  margin: 20px;
+  width: 100%;
+  margin-left: 0px;
+}
 
+
+.birthday-title {
+  font-size: 1.8rem;
+  color: #d6336c;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.birthday-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.birthday-card {
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  text-align: center;
+  width: 120px;
+}
+
+.birthday-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6%;
+}
+
+.birthday-card .name {
+  margin-top: 8px;
+  font-weight: bold;
+  color: #ff5733;
+}
+.birthday-card .age {
+  font-size: 0.95rem;
+  color: #777;
+  background-color: #fdf1d6;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-top: 4px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Confetti Animation */
+.confetti {
+  position: absolute;
+  top: -10px;
+  width: 10px;
+  height: 10px;
+  opacity: 0.7;
+  animation: fall 3.4s linear infinite;
+  border-radius: 50%;
+ position: absolute;
+  pointer-events: none;
+  z-index: 10;}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+  }
+}
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
 
 </style>
 
@@ -669,7 +763,24 @@ table td {
       </a>
     </div>
   {% endif %}
-
+{% if birthday_today %}
+  <div class="birthday-box">
+    <h2 class="birthday-title">🎉 Happy Birthday!</h2>
+    <div class="birthday-list">
+      {% for person in birthday_today %}
+        <div class="birthday-card">
+          {% if person.selfie_path %}
+          <img src="{{ person.selfie_path or url_for('static', filename='default_profile.png') }}" alt="{{ person.name }}">
+          {% else %}
+        <img src="{{ url_for('static', filename='images/default_profile.jpeg') }}" alt="Selfie">
+        {% endif %}
+          <div class="name">{{ person.name }}</div>
+          <div class="age">Age: {{ person.age }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
   <div style="margin-top:20px;">
     {% if user.role in ["Admin", "Contributor", "Viewer"] %}
       <a href="{{ url_for('tree') }}" class="btn btn-primary">{{_('View Family Tree')}}</a>
@@ -767,6 +878,39 @@ table td {
        style="display:none;"></div>
 
   <script>
+    
+function launchConfetti() {
+  const box = document.querySelector('.birthday-box');
+  if (!box) return;
+
+  const boxWidth = box.clientWidth;
+  const boxHeight = box.clientHeight;
+
+  for (let i = 0; i < 80; i++) {
+    const confetti = document.createElement('div');
+    confetti.classList.add('confetti');
+
+    // Random style
+    const size = Math.random() * 6 + 6; // 6px to 12px
+    confetti.style.width = `${size}px`;
+    confetti.style.height = `${size}px`;
+    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+
+    // Position inside box
+    confetti.style.position = 'absolute';
+    confetti.style.left = `${Math.random() * boxWidth}px`;
+    confetti.style.top = `${Math.random() * -40}px`;  // start slightly above
+
+    // Random animation duration
+    const duration = Math.random() * 3 + 5; // 5s to 8s
+    confetti.style.animationDuration = `${duration}s`;
+
+    box.appendChild(confetti);
+
+    setTimeout(() => confetti.remove(), duration * 1000);
+  }
+}
+
     const currentUserElem = document.getElementById('current-user');
     const currentUserEmail = currentUserElem ? currentUserElem.getAttribute('data-email') : null;
     const currentUserRole = currentUserElem ? currentUserElem.getAttribute('data-role') : null;

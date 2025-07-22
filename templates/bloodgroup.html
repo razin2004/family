@@ -422,3 +422,20 @@ color: var(--danger);
   </script>
 </body>
 </html>
+
+
+
+{% if birthdays %}
+<div id="birthday-container" class="birthday-popup">
+  <div class="confetti-container"></div>
+  <h2 class="birthday-heading">🎉 Happy Birthday 🎂</h2>
+  <div class="birthday-members">
+    {% for member in birthdays %}
+      <div class="birthday-card">
+        <img src="{{ url_for('static', filename=family_members.selfie_path) }}" alt="{{ family_members.name }}" />
+        <p>{{family_members.name }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
