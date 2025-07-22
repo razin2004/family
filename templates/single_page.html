@@ -124,6 +124,7 @@ header, h1, h2, h3, h4 {
   text-align: center;
   font-size: 1.8rem;
   font-weight: bold;
+  
 }
 
 .menu-placeholder {
@@ -684,15 +685,39 @@ table td {
   </select> -->
 
   <!-- Email Input -->
+
+  <!-- Invisible default submit button to force Enter to trigger login -->
+  <button type="submit" name="action" value="login" style="display:none"></button>
+
   <input type="email" name="email" placeholder="{{ _('Email') }}" value="{{ email or '' }}" required><br>
 
   {% if otp_sent %}
     <input type="text" name="otp" placeholder="{{ _('Enter OTP') }}" value="{{ otp or '' }}" required><br>
-    <button type="submit" name="action" value="login" class="btn btn-primary">{{ _('Login') }}</button>
+
+    <!-- Resend OTP: visible but placed after login in HTML -->
+    <div style="margin-bottom: 0px;">
+     <button type="submit" name="action" value="send_otp" formnovalidate
+  style="background:none;border:none;padding:0;color:#007bff;cursor:pointer;text-decoration:underline;
+  margin-top:-30px;text-align:left;font-size: 0.80rem;">
+  {{ _('Resend OTP') }}
+</button>
+    </div>
+
+    <!-- Login button (visually last but triggers on Enter) -->
+    <div>
+      <button type="submit" name="action" value="login" class="btn btn-primary">{{ _('Login') }}</button>
+      
+    </div>
+
   {% else %}
     <button type="submit" name="action" value="send_otp" class="btn btn-primary">{{ _('Send OTP') }}</button>
+     
   {% endif %}
 </form>
+
+
+
+
 
 <!-- JS to handle language change without clearing form -->
 <script>
