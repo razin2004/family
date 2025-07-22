@@ -57,6 +57,15 @@ CREATE TABLE relationships (
     FOREIGN KEY(related_to) REFERENCES family_members(id)
 );
 """)
+cur.execute("""
+
+CREATE TABLE user_credentials (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    role TEXT CHECK(role IN ('viewer', 'contributor')) NOT NULL
+);
+""")
 
 conn.commit()
 conn.close()
