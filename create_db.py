@@ -14,8 +14,10 @@ CREATE TABLE IF NOT EXISTS users (
     role TEXT,
     is_verified INTEGER,
     is_approved INTEGER
+    
 );
 """)
+
 
 # OTPS table
 cur.execute("""
@@ -27,9 +29,9 @@ CREATE TABLE IF NOT EXISTS otps (
 """)
 
 # FAMILY MEMBERS table
-cur.execute("DROP TABLE IF EXISTS family_members")
+
 cur.execute("""
-CREATE TABLE family_members (
+CREATE TABLE IF NOT EXISTS family_members (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     nickname TEXT,
@@ -41,29 +43,29 @@ CREATE TABLE family_members (
     selfie_path TEXT
 );
 
+""")
 
+cur.execute("""
 
+CREATE TABLE IF NOT EXISTS events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    date DATE NOT NULL,
+    event_type TEXT,
+    description TEXT
+);
 """)
 
 # RELATIONSHIPS table
-cur.execute("DROP TABLE IF EXISTS relationships")
+
 cur.execute("""
-CREATE TABLE relationships (
+CREATE TABLE IF NOT EXISTS relationships (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     member_id INTEGER,
     relation TEXT,           
     related_to INTEGER,
     FOREIGN KEY(member_id) REFERENCES family_members(id),
     FOREIGN KEY(related_to) REFERENCES family_members(id)
-);
-""")
-cur.execute("""
-
-CREATE TABLE user_credentials (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL,
-    role TEXT CHECK(role IN ('viewer', 'contributor')) NOT NULL
 );
 """)
 

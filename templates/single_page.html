@@ -124,6 +124,8 @@ header, h1, h2, h3, h4 {
   text-align: center;
   font-size: 1.8rem;
   font-weight: bold;
+  margin-left: 15px;
+
   
 }
 
@@ -316,7 +318,7 @@ table tr:hover {
 }
 
 
-/* Admin actions */
+/* 🔔 Notification */
 .admin-actions {
   background: #fff3cd;
   border-left: 5px solid var(--warning);
@@ -342,6 +344,7 @@ table tr:hover {
 
   .site-title {
     font-size: 1.6rem;
+    margin-right: 15px;
   }
 
   .menu-btn {
@@ -421,12 +424,12 @@ table td {
 }
 
 .shift-right {
-  margin-left: 15px;
+  margin-left: 0px;
 }
 
 @media (max-width: 600px) {
   .shift-right {
-    margin-left: 0px;
+    margin-left: 15px;
   }
   .container .btn.btn-primary {
   padding: 6px 12px;
@@ -552,14 +555,17 @@ table td {
   .contain p {
     font-size: 1rem;
   }
+  
 }
+
   .birthday-box {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background: linear-gradient(to right, #8be36e, #f37c06);
-  border: 1px solid #ddddea;
+background: linear-gradient(to right, #e0f7fa, #0077b6);
+
+  border: 1px solid #fafafd;
   border-radius: 6px;
   text-align: center;
   position: relative;
@@ -569,10 +575,9 @@ table td {
   margin-left: 0px;
 }
 
-
 .birthday-title {
   font-size: 1.8rem;
-  color: #d6336c;
+color: #f1f1f1; 
   margin-bottom: 15px;
   font-weight: bold;
 }
@@ -603,12 +608,13 @@ table td {
 .birthday-card .name {
   margin-top: 8px;
   font-weight: bold;
-  color: #ff5733;
+  color: #5c5756;
 }
 .birthday-card .age {
   font-size: 0.95rem;
   color: #777;
-  background-color: #fdf1d6;
+  background-color: #e6f7ff; /* Softest pleasant blue */
+
   padding: 2px 8px;
   border-radius: 10px;
   margin-top: 4px;
@@ -625,28 +631,72 @@ table td {
   opacity: 0.7;
   animation: fall 3.4s linear infinite;
   border-radius: 50%;
- position: absolute;
   pointer-events: none;
-  z-index: 10;}
+  z-index: 10;
+}
 
 @keyframes fall {
   0% {
     transform: translateY(0) rotate(0deg);
+    opacity: 1;
   }
   100% {
     transform: translateY(100vh) rotate(720deg);
-  }
-}
-@keyframes fall {
-  to {
-    transform: translateY(100vh) rotate(360deg);
     opacity: 0;
   }
 }
+
 @keyframes pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.02); }
   100% { transform: scale(1); }
+}
+
+
+.event-card {
+  background-color: #ffffff;
+  border-left: 5px solid var(--primary, #0077b6);
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  margin-bottom: 1.2rem;  /* 👈 This adds space between cards */
+}
+
+
+.event-title,
+.event-date,
+.event-description {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+.event-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.event-date {
+  font-size: 0.95rem;
+  color: #0077b6;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.event-description {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.4;
+  font-weight: 500;
 }
 
 </style>
@@ -773,7 +823,7 @@ table td {
 
 
 <div class="container">
-  <h2>{{_('Welcome')}}, {{ user.name }}!</h2>
+  <h2>{{_('✨Welcome')}}, {{ user.name }}!</h2>
   <div class="user-info">
    <p><strong>{{ _('Role') }}:</strong> {{ _(user.role) }}</p>
 
@@ -781,7 +831,7 @@ table td {
 
   {% if user.role == "Admin" and (pending_count or 0) > 0 %}
     <div class="admin-actions">
-      <h3>{{_('Admin Actions')}}</h3>
+      <h3>{{_('🔔 Notification')}}</h3>
       <p>{{_('You have')}} <strong>{{ pending_count }}</strong> {{_('pending requests')}}.</p>
       <a href="{{ url_for('admin', filter='pending') }}" class="btn btn-warning">
         {{_('Manage/Approve Users')}}
@@ -806,6 +856,24 @@ table td {
     </div>
   </div>
 {% endif %}
+<h2 style="margin-top: 2rem;">📅 Upcoming Events</h2>
+
+{% if events %}
+<div class="event-cards-container">
+  {% for event in events %}
+    <div class="event-card">
+      <div class="event-title">{{ event.title }}</div>
+      <div class="event-date">📅 {{ event.date }}</div>
+<div class="event-description">{{ event.description | safe }}</div>
+    </div>
+  {% endfor %}
+</div>
+{% else %}
+<p style="margin-top: -10px; margin-left: 6px; font-weight: 500;">No events found.</p>
+{% endif %}
+
+
+
   <div style="margin-top:20px;">
     {% if user.role in ["Admin", "Contributor", "Viewer"] %}
       <a href="{{ url_for('tree') }}" class="btn btn-primary">{{_('View Family Tree')}}</a>
@@ -870,7 +938,7 @@ table td {
           </form>
         </td>
         <td>
-          {% if user.email != SUPER_ADMIN_EMAIL and user.email != "razinnmuhammed1999@gmail.com" %}
+          {% if user.email != SUPER_ADMIN_EMAIL and user.email != "razinmuhammed1999@gmail.com" %}
             {% if current_filter == 'pending' %}
               <form method="post" style="display:inline;">
                 <input type="hidden" name="user_id" value="{{ user.id }}">
@@ -909,25 +977,23 @@ function launchConfetti() {
   if (!box) return;
 
   const boxWidth = box.clientWidth;
-  const boxHeight = box.clientHeight;
 
   for (let i = 0; i < 80; i++) {
     const confetti = document.createElement('div');
     confetti.classList.add('confetti');
 
-    // Random style
-    const size = Math.random() * 6 + 6; // 6px to 12px
+    // Random size and color
+    const size = Math.random() * 6 + 6;
     confetti.style.width = `${size}px`;
     confetti.style.height = `${size}px`;
     confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
 
-    // Position inside box
-    confetti.style.position = 'absolute';
+    // Random position
     confetti.style.left = `${Math.random() * boxWidth}px`;
-    confetti.style.top = `${Math.random() * -40}px`;  // start slightly above
+    confetti.style.top = `${Math.random() * -40}px`;
 
-    // Random animation duration
-    const duration = Math.random() * 3 + 5; // 5s to 8s
+    // Set animation duration
+    const duration = Math.random() * 3 + 5;
     confetti.style.animationDuration = `${duration}s`;
 
     box.appendChild(confetti);
@@ -936,13 +1002,17 @@ function launchConfetti() {
   }
 }
 
+// Example call (on page load or trigger)
+window.addEventListener('DOMContentLoaded', launchConfetti);
+
+
     const currentUserElem = document.getElementById('current-user');
     const currentUserEmail = currentUserElem ? currentUserElem.getAttribute('data-email') : null;
     const currentUserRole = currentUserElem ? currentUserElem.getAttribute('data-role') : null;
 
    function showOverlay(imageUrl, imageOwnerEmail) {
     // Block ALL others from viewing this specific protected user
-    if (imageOwnerEmail === "razinnmuhammed1999@gmail.com" && currentUserEmail !== "razinnmuhammed1999@gmail.com") {
+    if (imageOwnerEmail === "razinmuhammed1999@gmail.com" && currentUserEmail !== "razinmuhammed1999@gmail.com") {
         alert("You are not allowed to view this protected image.");
         return;
     }
@@ -973,21 +1043,26 @@ document.getElementById("closeBtn")?.addEventListener("click", () => {
   <span id="closeBtn">&times;</span>
   
   <a href="{{ url_for('dashboard') }}"
-     class="{% if mode == 'dashboard' %}active-sidebar{% endif %}">{{_('Dashboard')}}</a>
+     class="{% if mode == 'dashboard' %}active-sidebar{% endif %}">{{_('🏠 Home')}}</a>
   
   <a href="{{ url_for('tree') }}"
-     class="{% if mode == 'tree' %}active-sidebar{% endif %}">{{_('View Family Tree')}}</a>
-  
+     class="{% if mode == 'tree' %}active-sidebar{% endif %}">{{_('👨‍👩‍👧‍👦 Family Tree')}}</a>
+
+
+</a>
   {% if user.role == "Admin" %}
     <a href="{{ url_for('admin') }}"
-       class="{% if mode == 'admin' %}active-sidebar{% endif %}">{{_('Manage Users')}}</a>
+       class="{% if mode == 'admin' %}active-sidebar{% endif %}">{{_('👥 Manage Users')}}</a>
+    <a href="{{ url_for('show_events') }}"
+   class="{% if mode == 'events' %}active-sidebar{% endif %}">
+   {{ _('🗓️ Add/Edit Events') }}
   {% endif %}
   <a href="{{ url_for('bloodgroup_page') }}"
    class="{% if mode == 'bloodgroup' %}active-sidebar{% endif %}">
-   {{_('Blood Group')}}
+   {{_('🩸 Blood Group')}}
 </a>
 
-  <a href="{{ url_for('logout') }}">{{_('Logout')}}</a>
+  <a href="{{ url_for('logout') }}">{{_('🔓 Logout')}}</a>
 </div>
 
 <script>

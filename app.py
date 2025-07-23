@@ -19,6 +19,7 @@ import cloudinary.api
 from flask import Flask, request, session
 from flask_babel import Babel, _
 from datetime import datetime, timedelta
+from datetime import datetime, date
 
 cloudinary.config(
     cloud_name="dxdy5tsju",
@@ -27,7 +28,7 @@ cloudinary.config(
 )
 
 # SUPER ADMIN email
-SUPER_ADMIN_EMAIL = "doctorbooksystem@gmail.com"
+SUPER_ADMIN_EMAIL = "razinmuhammed1999@gmail.com"
 
 
 app = Flask(__name__)
@@ -411,7 +412,6 @@ def dashboard():
         try:
             dob_obj = datetime.strptime(member["dob"], "%Y-%m-%d")
             if dob_obj.strftime('%m-%d') == today:
-                # Calculate age
                 today_full = datetime.today()
                 age = today_full.year - dob_obj.year - ((today_full.month, today_full.day) < (dob_obj.month, dob_obj.day))
                 birthday_today.append({
@@ -422,12 +422,23 @@ def dashboard():
         except ValueError:
             continue
 
+    # ✅ Get today's date in ISO format (YYYY-MM-DD)
+    today_full_date = date.today().isoformat()
+
+    # ✅ Fetch only today and upcoming events
+    events = db.execute("""
+        SELECT * FROM events
+        WHERE date >= ?
+        ORDER BY date ASC
+    """, (today_full_date,)).fetchall()
+
     return render_template(
         "single_page.html",
         mode="dashboard",
         user=current_user,
         pending_count=pending_count,
-        birthday_today=birthday_today
+        birthday_today=birthday_today,
+        events=events
     )
 
 @app.route("/logout")
@@ -678,6 +689,103 @@ def delete_member(member_id):
     db.commit()
     flash("Member deleted.")
     return redirect(url_for("tree"))
+def get_db_connection():
+    conn = sqlite3.connect('family.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+@app.route('/events', methods=['GET'])
+def show_events():
+    conn = get_db_connection()
+    today = date.today().isoformat()
+
+    # Upcoming events: today or later
+    upcoming_events = conn.execute(
+        "SELECT * FROM events WHERE date >= ? ORDER BY date ASC", (today,)
+    ).fetchall()
+
+    # Past events: before today
+    past_events = conn.execute(
+        "SELECT * FROM events WHERE date < ? ORDER BY date DESC", (today,)
+    ).fetchall()
+
+    conn.close()
+    return render_template(
+        'events.html',
+        upcoming_events=upcoming_events,
+        past_events=past_events,
+        edit_mode=False,
+        user=current_user
+    )
+# 🟢 Add event (POST)
+@app.route('/add_event', methods=['POST'])
+def add_event():
+    title = request.form['title']
+    date_str = request.form['date']
+    description = request.form['description']
+
+    # Convert date string to date object
+    try:
+        event_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+    except ValueError:
+        flash("Invalid date format.", "error")
+        return redirect(url_for('show_events'))
+
+    # ✅ Prevent past dates
+    if event_date < date.today():
+        flash("Cannot add an event in the past.", "error")
+        return redirect(url_for('show_events'))
+
+    # Proceed with DB insert
+    conn = get_db_connection()
+    conn.execute("INSERT INTO events (title, date, description) VALUES (?, ?, ?)",
+                 (title, date_str, description))
+    conn.commit()
+    conn.close()
+    flash("Event added successfully!", "success")
+    return redirect(url_for('show_events'))
+# 🟢 Edit event form (GET)
+@app.route('/edit_event/<int:event_id>', methods=['GET'])
+def edit_event(event_id):
+    conn = get_db_connection()
+    event = conn.execute("SELECT * FROM events WHERE id = ?", (event_id,)).fetchone()
+    events = conn.execute("SELECT * FROM events ORDER BY date").fetchall()
+    conn.close()
+
+    if event is None:
+        flash("Event not found.", "error")
+        return redirect(url_for('show_events'))
+
+    today = date.today().isoformat()
+    return render_template('events.html', events=events, event=event, edit_mode=True, today=today)
+
+# 🟢 Update event (POST)
+@app.route('/update_event/<int:event_id>', methods=['POST'])
+def update_event(event_id):
+    title = request.form['title']
+    date = request.form['date']
+    description = request.form['description']
+
+    conn = get_db_connection()
+    conn.execute('''
+        UPDATE events
+        SET title = ?, date = ?, description = ?
+        WHERE id = ?
+    ''', (title, date,  description, event_id))
+    conn.commit()
+    conn.close()
+
+    flash("Event updated successfully!", "success")
+    return redirect(url_for('show_events'))
+
+# 🟢 Delete event (GET)
+@app.route('/delete_event/<int:event_id>', methods=['GET'])
+def delete_event(event_id):
+    conn = get_db_connection()
+    conn.execute("DELETE FROM events WHERE id = ?", (event_id,))
+    conn.commit()
+    conn.close()
+    flash("Event deleted successfully!", "success")
+    return redirect(url_for('show_events'))
 
 # Admin panel for user approvals
 @app.route("/admin", methods=["GET", "POST"])

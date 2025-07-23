@@ -311,20 +311,24 @@ color: var(--danger);
     <span id="closeBtn">&times;</span>
 
     <a href="{{ url_for('dashboard') }}"
-       class="{% if mode == 'dashboard' %}active-sidebar{% endif %}">{{_('Dashboard')}}</a>
+       class="{% if mode == 'dashboard' %}active-sidebar{% endif %}">{{_('🏠 Home')}}</a>
 
     <a href="{{ url_for('tree') }}"
-       class="{% if mode == 'tree' %}active-sidebar{% endif %}">{{_('View Family Tree')}}</a>
+       class="{% if mode == 'tree' %}active-sidebar{% endif %}">{{_('👨‍👩‍👧‍👦 Familt Tree')}}</a>
 
     {% if user.role == "Admin" %}
       <a href="{{ url_for('admin') }}"
-         class="{% if mode == 'admin' %}active-sidebar{% endif %}">{{_('Manage Users')}}</a>
+         class="{% if mode == 'admin' %}active-sidebar{% endif %}">{{_('👥 Manage Users')}}</a>
+         <a href="{{ url_for('show_events') }}"
+   class="{% if mode == 'events' %}active-sidebar{% endif %}">
+   {{ _('🗓️ Add/Edit Events') }}
+</a>
     {% endif %}
 
     <a href="{{ url_for('bloodgroup_page') }}"
-       class="{% if mode == 'bloodgroup' %}active-sidebar{% endif %}">{{_('Blood Group')}}</a>
+       class="{% if mode == 'bloodgroup' %}active-sidebar{% endif %}">{{_('🩸 Blood Group')}}</a>
 
-    <a href="{{ url_for('logout') }}">{{_('Logout')}}</a>
+    <a href="{{ url_for('logout') }}">{{_('🔓 Logout')}}</a>
   </div>
 
   <script>
@@ -422,20 +426,3 @@ color: var(--danger);
   </script>
 </body>
 </html>
-
-
-
-{% if birthdays %}
-<div id="birthday-container" class="birthday-popup">
-  <div class="confetti-container"></div>
-  <h2 class="birthday-heading">🎉 Happy Birthday 🎂</h2>
-  <div class="birthday-members">
-    {% for member in birthdays %}
-      <div class="birthday-card">
-        <img src="{{ url_for('static', filename=family_members.selfie_path) }}" alt="{{ family_members.name }}" />
-        <p>{{family_members.name }}</p>
-      </div>
-    {% endfor %}
-  </div>
-</div>
-{% endif %}

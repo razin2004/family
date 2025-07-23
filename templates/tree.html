@@ -682,7 +682,7 @@ h4 {
     
 
     <div class="tree-header">
-      <a href="{{ url_for('dashboard') }}" class="btn btn-back">← {{_('Back to Dashboard')}}</a>
+      <a href="{{ url_for('dashboard') }}" class="btn btn-back">← {{_('Back to Home')}}</a>
     </div>
     
 <div class="tree-search">
@@ -794,21 +794,25 @@ h4 {
   <span id="closeBtn">&times;</span>
   
   <a href="{{ url_for('dashboard') }}"
-     class="{% if mode == 'dashboard' %}active-sidebar{% endif %}">{{_('Dashboard')}}</a>
+     class="{% if mode == 'dashboard' %}active-sidebar{% endif %}">{{_('🏠 Home')}}</a>
   
   <a href="{{ url_for('tree') }}"
-     class="{% if mode == 'tree' %}active-sidebar{% endif %}">{{_('View Family Tree')}}</a>
+     class="{% if mode == 'tree' %}active-sidebar{% endif %}">{{_('👨‍👩‍👧‍👦 Familt Tree')}}</a>
   
   {% if user.role == "Admin" %}
     <a href="{{ url_for('admin') }}"
-       class="{% if mode == 'admin' %}active-sidebar{% endif %}">{{_('Manage Users')}}</a>
+       class="{% if mode == 'admin' %}active-sidebar{% endif %}">{{_('👥 Manage Users')}}</a>
+       <a href="{{ url_for('show_events') }}"
+   class="{% if mode == 'events' %}active-sidebar{% endif %}">
+   {{ _('🗓️ Add/Edit Events') }}
+</a>
   {% endif %}
   <a href="{{ url_for('bloodgroup_page') }}"
    class="{% if mode == 'bloodgroup' %}active-sidebar{% endif %}">
-   {{_('Blood Group')}}
+   {{_('🩸 Blood Group')}}
 </a>
 
-  <a href="{{ url_for('logout') }}">{{_('Logout')}}</a>
+  <a href="{{ url_for('logout') }}">{{_('🔓 Logout')}}</a>
 </div>
 <script>
  
